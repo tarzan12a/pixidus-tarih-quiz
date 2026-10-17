@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tarih & Genel Kültür Bilgi Yarışması</title>
+
+    <!-- Pixidus HTML SDK Integration -->
+    <script src="https://pixidus.com/sdk/v1/pixidus-html-sdk.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207'
+                        },
+                        bronze: {
+                            500: '#cd7f32',
+                            600: '#b8732d'
+                        },
+                        darkpaper: '#1e293b'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-short': 'bounce 0.6s ease-in-out 1'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Cinzel -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: manipulation;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .title-font {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(234, 179, 8, 0.25);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .gold-border {
+            border: 2px solid #eab308;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-button {
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            color: #0f172a;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .gold-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(234, 179, 8, 0.5);
+        }
+
+        .gold-button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .option-btn {
+            transition: all 0.2s ease;
+            background: rgba(51, 65, 85, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: #eab308;
+            background: rgba(51, 65, 85, 1);
+            transform: translateX(4px);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #15803d 0%, #166534 100%) !important;
+            border-color: #22c55e !important;
+            color: #ffffff !important;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
+            border-color: #ef4444 !important;
+            color: #ffffff !important;
+        }
+
+        .card-flip {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Custom Scrollbar for list */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(234, 179, 8, 0.4);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between items-center p-3 sm:p-6 overflow-x-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="w-full max-w-2xl flex justify-between items-center mb-3 sm:mb-6 glass-panel rounded-2xl px-4 py-3">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-bold text-xl shadow-lg">
+                <i class="fa-solid fa-monument"></i>
+            </div>
+            <div>
+                <h1 class="title-font text-base sm:text-lg font-bold gold-gradient-text tracking-wide leading-tight">TARİH & KÜLTÜR</h1>
+                <p id="sdk-status-badge" class="text-xs text-slate-400 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+                    <span id="sdk-mode-text">Pixidus Hazır</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Controls (Sound & HighScore) -->
+        <div class="flex items-center space-x-2">
+            <button id="sound-btn" onclick="toggleSound()" class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 hover:bg-slate-700 transition" title="Ses Aç/Kapat">
+                <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+            </button>
+            <div class="bg-slate-800/80 border border-amber-500/30 rounded-xl px-3 py-1.5 flex items-center space-x-2">
+                <i class="fa-solid fa-crown text-amber-400 text-sm"></i>
+                <span id="top-high-score" class="font-bold text-amber-300 text-sm">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-2xl flex-1 flex flex-col justify-center my-auto relative">
+
+        <!-- START SCREEN -->
+        <div id="start-screen" class="glass-panel rounded-3xl p-6 sm:p-8 text-center gold-border my-auto animate-fadeIn">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-4xl shadow-inner">
+                <i class="fa-solid fa-landmark"></i>
+            </div>
+
+            <h2 class="title-font text-2xl sm:text-3xl font-extrabold gold-gradient-text mb-2">Tarih & Genel Kültür</h2>
+            <p class="text-slate-300 text-sm sm:text-base max-w-md mx-auto mb-6 leading-relaxed">
+                Kadim medeniyetlerden yakın tarihe, sanattan edebiyata kadar uzanan 15 soruluk bu bilgi yolculuğuna hazır mısınız?
+            </p>
+
+            <!-- Quick Info Cards -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
+                <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
+                    <i class="fa-solid fa-stopwatch text-amber-400 text-lg mb-1"></i>
+                    <div class="text-xs text-slate-400">Süre / Soru</div>
+                    <div class="font-bold text-slate-100 text-sm sm:text-base">15 Saniye</div>
+                </div>
+                <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
+                    <i class="fa-solid fa-bolt text-amber-400 text-lg mb-1"></i>
+                    <div class="text-xs text-slate-400">Kombo Bonusu</div>
+                    <div class="font-bold text-slate-100 text-sm sm:text-base">Seri Puan</div>
+                </div>
+                <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
+                    <i class="fa-solid fa-life-ring text-amber-400 text-lg mb-1"></i>
+                    <div class="text-xs text-slate-400">Jokerler</div>
+                    <div class="font-bold text-slate-100 text-sm sm:text-base">50:50 & +10s</div>
+                </div>
+            </div>
+
+            <button onclick="startGameEngine()" class="w-full gold-button py-4 rounded-2xl font-extrabold text-base sm:text-lg tracking-wide uppercase flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> Yarışmaya Başla
+            </button>
+        </div>
+
+        <!-- QUIZ GAMEPLAY SCREEN -->
+        <div id="quiz-screen" class="hidden flex-col gap-4 relative">
+
+            <!-- Stats & Global Game Controls Bar -->
+            <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-wrap gap-2 justify-between items-center text-xs sm:text-sm">
+                <!-- Question Counter -->
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400">Soru:</span>
+                    <span id="current-q-num" class="font-bold text-amber-400 text-base">1</span>
+                    <span class="text-slate-500">/</span>
+                    <span id="total-q-num" class="text-slate-400">20</span>
+                </div>
+
+                <!-- Combo/Streak Indicator -->
+                <div class="flex items-center gap-1.5 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/30">
+                    <i class="fa-solid fa-fire text-amber-400 animate-pulse"></i>
+                    <span id="streak-counter" class="font-bold text-amber-300">0x Seri</span>
+                </div>
+
+                <!-- Current Score -->
+                <div class="flex items-center gap-1.5">
+                    <span class="text-slate-400">Puan:</span>
+                    <span id="current-score" class="font-extrabold text-amber-400 text-lg">0</span>
+                </div>
+
+                <!-- Game Playback Controls (Start/Stop & Reset) -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-700/60">
+                    <button id="pause-btn" onclick="togglePauseGame()" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                        <i id="pause-btn-icon" class="fa-solid fa-pause"></i>
+                        <span id="pause-btn-text">Durdur</span>
+                    </button>
+                    <button id="reset-btn" onclick="resetGame()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer" title="Oyunu Sıfırla">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Sıfırla</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Timer & Bar -->
+            <div class="glass-panel rounded-2xl p-3 flex flex-col gap-1.5">
+                <div class="flex justify-between items-center text-xs font-semibold px-1">
+                    <span class="text-slate-400 flex items-center gap-1">
+                        <i class="fa-regular fa-clock text-amber-400"></i> Kalan Süre
+                    </span>
+                    <span id="timer-text" class="text-amber-400 font-mono text-sm font-bold">15s</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700">
+                    <div id="timer-bar" class="bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full transition-all duration-100 ease-linear" style="width: 100%;"></div>
+                </div>
+            </div>
+
+            <!-- Question Card Container (Relative for Pause Overlay) -->
+            <div class="relative">
+                <!-- Question Card -->
+                <div id="question-card" class="glass-panel rounded-3xl p-5 sm:p-7 border border-amber-500/30 flex flex-col gap-5 card-flip">
+                    
+                    <!-- Category Badge & Lifelines Header -->
+                    <div class="flex justify-between items-center gap-2">
+                        <span id="q-category" class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/20">
+                            Osmanlı Tarihi
+                        </span>
+
+                        <!-- Lifeline Buttons -->
+                        <div class="flex items-center gap-2">
+                            <button id="lifeline-5050" onclick="useLifeline5050()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5" title="Yarı Yarıya Jokeri">
+                                <i class="fa-solid fa-[#]"></i> 50:50
+                            </button>
+                            <button id="lifeline-time" onclick="useLifelineTime()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5" title="+10 Saniye Ek Süre">
+                                <i class="fa-solid fa-plus text-[10px]"></i>10s
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question Text -->
+                    <h3 id="question-text" class="text-slate-100 font-semibold text-base sm:text-xl leading-relaxed">
+                        Soru yükleniyor...
+                    </h3>
+
+                    <!-- Options List -->
+                    <div id="options-container" class="grid grid-cols-1 gap-3 pt-2">
+                        <!-- Option buttons will be rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Pause Overlay Screen -->
+                <div id="pause-overlay" class="hidden absolute inset-0 glass-panel rounded-3xl border border-amber-500/50 flex flex-col items-center justify-center p-6 text-center z-20 backdrop-blur-md">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-3xl mb-3 shadow-lg">
+                        <i class="fa-solid fa-pause"></i>
+                    </div>
+                    <h3 class="title-font text-2xl font-bold gold-gradient-text mb-2">OYUN DURDURULDU</h3>
+                    <p class="text-slate-300 text-sm mb-6">Yarışma donduruldu. Devam etmek için aşağıdaki butona basın.</p>
+                    <div class="flex gap-3 w-full max-w-xs">
+                        <button onclick="togglePauseGame()" class="flex-1 gold-button py-3 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> Devam Et
+                        </button>
+                        <button onclick="resetGame()" class="px-4 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 rounded-xl font-bold text-sm flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-rotate-left"></i> Sıfırla
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END GAME / RESULTS SCREEN -->
+        <div id="result-screen" class="hidden glass-panel rounded-3xl p-6 sm:p-8 text-center gold-border my-auto animate-fadeIn">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 text-3xl font-extrabold shadow-xl">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+
+            <h2 id="result-title" class="title-font text-2xl sm:text-3xl font-bold gold-gradient-text mb-1">Tebrikler!</h2>
+            <p id="result-subtitle" class="text-slate-400 text-sm mb-6">Yarışmayı Başarıyla Tamamladınız</p>
+
+            <!-- Score Display Box -->
+            <div class="bg-slate-800/80 rounded-2xl p-4 border border-amber-500/30 mb-6">
+                <div class="text-xs text-slate-400 uppercase tracking-wider mb-1">Toplam Puan</div>
+                <div id="final-score" class="text-4xl sm:text-5xl font-extrabold gold-gradient-text mb-2">0</div>
+                <div id="rank-badge" class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full">
+                    Ünvan: Tarih Meraklısı
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6 text-center">
+                <div class="bg-slate-800/50 p-3 rounded-2xl border border-slate-700">
+                    <div class="text-xs text-slate-400">Doğru / Yanlış</div>
+                    <div id="stat-correct" class="font-bold text-emerald-400 text-sm sm:text-base mt-1">0 / 0</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-2xl border border-slate-700">
+                    <div class="text-xs text-slate-400">Doğruluk Oranı</div>
+                    <div id="stat-accuracy" class="font-bold text-amber-300 text-sm sm:text-base mt-1">%0</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-2xl border border-slate-700">
+                    <div class="text-xs text-slate-400">En Yüksek Seri</div>
+                    <div id="stat-streak" class="font-bold text-amber-400 text-sm sm:text-base mt-1">0</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="startGameEngine()" class="flex-1 gold-button py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Yeniden Başlat
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-2xl text-center text-xs text-slate-500 py-3 mt-auto">
+        <span>Pixidus HTML5 Game Platform Integration &copy; 2026</span>
+    </footer>
+
+    <!-- GAME LOGIC SCRIPT -->
+    <script>
+        /* ===================================================================
+           1. QUESTIONS DATABASE (20+ History & Culture Questions in Turkish)
+           =================================================================== */
+        const QUESTION_BANK = [
+            {
+                category: "Osmanlı Tarihi",
+                question: "Osmanlı İmparatorluğu'nun ilk resmi başkenti neresidir?",
+                options: ["Söğüt", "Bursa", "Edirne", "İstanbul"],
+                answer: 1
+            },
+            {
+                category: "Cumhuriyet Tarihi",
+                question: "TBMM hangi tarihte açılmıştır?",
+                options: ["19 Mayıs 1919", "23 Nisan 1920", "29 Ekim 1923", "30 Ağustos 1922"],
+                answer: 1
+            },
+            {
+                category: "Büyük Selçuklu",
+                question: "1071 Malazgirt Meydan Muharebesi'nde Bizans İmparatoru Romen Diyojen'i mağlup eden Selçuklu hükümdarı kimdir?",
+                options: ["Tuğrul Bey", "Sultan Alparslan", "Melikşah", "Kılıç Arslan"],
+                answer: 1
+            },
+            {
+                category: "Dünya Tarihi",
+                question: "Matbaayı hareketli harflerle geliştirerek modern basımın öncüsü olan mucit kimdir?",
+                options: ["Johannes Gutenberg", "Galileo Galilei", "Nikola Tesla", "Leonardo da Vinci"],
+                answer: 0
+            },
+            {
+                category: "Eski Çağ Medeniyetleri",
+                question: "Tarihte bilinen ilk yazılı kanunlar hangi Mezopotamya hükümdarı tarafından hazırlanmıştır?",
+                options: ["Ramses", "Büyük İskender", "Hammurabi", "Kuruş"],
+                answer: 2
+            },
+            {
+                category: "Genel Kültür & Edebiyat",
+                question: "İstiklal Marşı'mızın şairi Mehmet Akif Ersoy, şiirlerini hangi eserde toplamıştır?",
+                options: ["Safahat", "Nutuk", "Çalıkuşu", "Ateşten Gömlek"],
+                answer: 0
+            },
+            {
+                category: "Osmanlı Tarihi",
+                question: "İstanbul'un fethi sonrası Fatih Sultan Mehmet hangi unvanı üstlenmiştir?",
+                options: ["Kayzer-i Rûm", "Halife-i Müslimîn", "Hüdavendigar", "Sultan-ı Muazzam"],
+                answer: 0
+            },
+            {
+                category: "Sanat Tarihi",
+                question: "Rönesans döneminin ünlü eseri 'Mona Lisa' tablosu hangi müzede sergilenmektedir?",
+                options: ["Prado Müzesi", "British Museum", "Louvre Müzesi", "Uffizi Galerisi"],
+                answer: 2
+            },
+            {
+                category: "Türk Tarihi",
+                question: "Tarihte bilinen ilk Türk devleti aşağıdakilerden hangisidir?",
+                options: ["Göktürk Devleti", "Asya Hun Devleti", "Uygur Devleti", "Karahanlılar"],
+                answer: 1
+            },
+            {
+                category: "Anadolu Medeniyetleri",
+                question: "Parayı ilk kez icat ederek ticarette takas usulüne son veren eski Anadolu medeniyeti hangisidir?",
+                options: ["Lidyalılar", "Frigler", "Urartular", "Hititler"],
+                answer: 0
+            },
+            {
+                category: "Dünya Tarihi",
+                question: "Pusulanın keşfi ve denizcilikte kullanılması hangi dönemin başlamasında doğrudan etkili olmuştur?",
+                options: ["Sanayi Devrimi", "Coğrafi Keşifler", "Fransız İhtilali", "Aydınlanma Çağı"],
+                answer: 1
+            },
+            {
+                category: "Genel Kültür & Mimari",
+                question: "Mimar Sinan'ın 'Ustalık Eserim' olarak adlandırdığı tarihi yapı hangisidir?",
+                options: ["Süleymaniye Camii", "Şehzade Camii", "Selimiye Camii", "Sultanahmet Camii"],
+                answer: 2
+            },
+            {
+                category: "Mitoloji & Kültür",
+                question: "Dünyanın Dünyaca ünlü 'Dünyanın Yedi Harikası'ndan biri olan İskenderiye Feneri hangi ülkedeydi?",
+                options: ["Yunanistan", "Mısır", "İtalya", "Türkiye"],
+                answer: 1
+            },
+            {
+                category: "Cumhuriyet Tarihi",
+                question: "Mustafa Kemal Atatürk'e 'Gazilik' unvanı ve 'Mareşallik' rütbesi hangi zaferden sonra verilmiştir?",
+                options: ["I. İnönü Zaferi", "Çanakkale Zaferi", "Sakarya Meydan Muharebesi", "Büyük Taarruz"],
+                answer: 2
+            },
+            {
+                category: "Coğrafya & Kültür",
+                question: "Dünyanın en derin noktası olan 'Mariana Çukuru' hangi okyanustadır?",
+                options: ["Atlas Okyanusu", "Hint Okyanusu", "Pasifik (Büyük) Okyanusu", "Arktik Okyanusu"],
+                answer: 2
+            },
+            {
+                category: "Dünya Tarihi",
+                question: "1789 Fransız İhtilali hangi hapse yapılan baskınla simgeleşmiştir?",
+                options: ["Bastille Hapishanesi", "Tower of London", "Alcatraz", "Chillon Kalesi"],
+                answer: 0
+            },
+            {
+                category: "Genel Kültür",
+                question: "UNESCO Dünya Mirası listesinde yer alan Göbeklitepe hangi ilimiz sınırlarındadır?",
+                options: ["Gaziantep", "Şanlıurfa", "Mardin", "Diyarbakır"],
+                answer: 1
+            },
+            {
+                category: "Osmanlı Tarihi",
+                question: "Osmanlı'da ilk kâğıt para (Kaime) hangi padişah döneminde bastırılmıştır?",
+                options: ["Sultan Abdülmecid", "II. Mahmud", "III. Selim", "Kanuni Sultan Süleyman"],
+                answer: 0
+            },
+            {
+                category: "Sanat & Kültür",
+                question: "'Kaplumbağa Terbiyecisi' tablosuyla ünlü Türk ressam kimdir?",
+                options: ["Osman Hamdi Bey", "Şeker Ahmet Paşa", "İbrahim Çallı", "Abidin Dino"],
+                answer: 0
+            },
+            {
+                category: "Türk Tarihi",
+                question: "Orhun Abideleri günümüzde hangi ülkenin sınırları içerisinde yer almaktadır?",
+                options: ["Özbekistan", "Moğolistan", "Kazakistan", "Kırgızistan"],
+                answer: 1
+            }
+        ];
+
+        /* ===================================================================
+           2. WEB AUDIO API SYNTHESIZER (Sound Effects)
+           =================================================================== */
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+
+                if (type === 'click') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'correct') {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.25);
+                    });
+                } else if (type === 'wrong') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.3);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'pause') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(500, now);
+                    osc.frequency.setValueAtTime(350, now + 0.08);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'resume') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(350, now);
+                    osc.frequency.setValueAtTime(500, now + 0.08);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'reset') {
+                    [600, 450, 300].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'square';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.1, now + idx * 0.06);
+                        gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.06 + 0.1);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.06);
+                        osc.stop(now + idx * 0.06 + 0.1);
+                    });
+                } else if (type === 'lifeline') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'gameover') {
+                    [400, 350, 300, 250].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                        gain.gain.setValueAtTime(0.2, now + idx * 0.12);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.3);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.12);
+                        osc.stop(now + idx * 0.12 + 0.3);
+                    });
+                }
+            } catch (e) {
+                console.log("Audio play error:", e);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            if (soundEnabled) {
+                icon.className = 'fa-solid fa-volume-high';
+                playSound('click');
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+            }
+        }
+
+        /* ===================================================================
+           3. GAME STATE MANAGEMENT
+           =================================================================== */
+        let pixidusContext = null;
+        let questions = [];
+        let currentQIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let correctCount = 0;
+        let timerInterval = null;
+        let timeLeft = 15;
+        let isPaused = false;
+        const QUESTION_TIME = 15;
+
+        let lifeline5050Used = false;
+        let lifelineTimeUsed = false;
+
+        let highScore = parseInt(localStorage.getItem('pixidus_tarih_highscore') || '0');
+
+        // Update Highscore UI
+        document.getElementById('top-high-score').textContent = highScore;
+
+        /* ===================================================================
+           4. PIXIDUS SDK INTEGRATION & HANDSHAKE
+           =================================================================== */
+        let sdkInitialized = false;
+
+        function initPixidusHandshake() {
+            // Check if Pixidus SDK exists
+            if (typeof Pixidus !== 'undefined' && Pixidus.onReady) {
+                Pixidus.onReady(function (context) {
+                    sdkInitialized = true;
+                    pixidusContext = context || {};
+                    console.log("Pixidus SDK Ready:", pixidusContext);
+                    document.getElementById('sdk-mode-text').textContent = 'Pixidus Bağlandı';
+                });
+            }
+
+            // Fallback launcher for preview/standalone execution
+            setTimeout(function() {
+                if (!sdkInitialized) {
+                    console.log("Pixidus SDK timeout: Running in standalone/preview mode.");
+                    document.getElementById('sdk-mode-text').textContent = 'Önizleme Modu';
+                    pixidusContext = { standalone: true, platform: 'web' };
+                }
+            }, 1000);
+        }
+
+        // Initialize handshake when DOM is ready
+        window.addEventListener('DOMContentLoaded', initPixidusHandshake);
+
+        /* ===================================================================
+           5. GAME ENGINE LOGIC
+           =================================================================== */
+        function startGameEngine() {
+            playSound('click');
+            
+            // Reset state
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            correctCount = 0;
+            currentQIndex = 0;
+            isPaused = false;
+            lifeline5050Used = false;
+            lifelineTimeUsed = false;
+
+            // Shuffle questions
+            questions = [...QUESTION_BANK].sort(() => Math.random() - 0.5);
+
+            // Reset UI States
+            resetPauseUI();
+            resetLifelineButtonsUI();
+
+            // Screen Switch
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('quiz-screen').classList.add('flex');
+
+            loadQuestion();
+        }
+
+        function togglePauseGame() {
+            if (document.getElementById('quiz-screen').classList.contains('hidden')) return;
+
+            isPaused = !isPaused;
+            const pauseBtnIcon = document.getElementById('pause-btn-icon');
+            const pauseBtnText = document.getElementById('pause-btn-text');
+            const pauseOverlay = document.getElementById('pause-overlay');
+
+            if (isPaused) {
+                playSound('pause');
+                clearInterval(timerInterval);
+                pauseBtnIcon.className = "fa-solid fa-play";
+                pauseBtnText.textContent = "Başlat";
+                pauseOverlay.classList.remove('hidden');
+                disableOptions();
+            } else {
+                playSound('resume');
+                pauseBtnIcon.className = "fa-solid fa-pause";
+                pauseBtnText.textContent = "Durdur";
+                pauseOverlay.classList.add('hidden');
+                enableOptions();
+                startTimerInterval();
+            }
+        }
+
+        function resetPauseUI() {
+            isPaused = false;
+            document.getElementById('pause-btn-icon').className = "fa-solid fa-pause";
+            document.getElementById('pause-btn-text').textContent = "Durdur";
+            document.getElementById('pause-overlay').classList.add('hidden');
+        }
+
+        function resetGame() {
+            playSound('reset');
+            clearInterval(timerInterval);
+            startGameEngine();
+        }
+
+        function resetLifelineButtonsUI() {
+            const btn5050 = document.getElementById('lifeline-5050');
+            const btnTime = document.getElementById('lifeline-time');
+
+            btn5050.disabled = false;
+            btn5050.className = "px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer";
+            
+            btnTime.disabled = false;
+            btnTime.className = "px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer";
+        }
+
+        function loadQuestion() {
+            clearInterval(timerInterval);
+
+            if (currentQIndex >= questions.length) {
+                endGame();
+                return;
+            }
+
+            resetPauseUI();
+            const q = questions[currentQIndex];
+
+            // UI Elements Update
+            document.getElementById('current-q-num').textContent = currentQIndex + 1;
+            document.getElementById('total-q-num').textContent = questions.length;
+            document.getElementById('q-category').textContent = q.category;
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('current-score').textContent = score;
+            document.getElementById('streak-counter').textContent = `${streak}x Seri`;
+
+            // Card Animation trigger
+            const qCard = document.getElementById('question-card');
+            qCard.classList.remove('card-flip');
+            void qCard.offsetWidth; // trigger reflow
+            qCard.classList.add('card-flip');
+
+            // Render Options
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            const optionLetters = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn w-full p-3.5 sm:p-4 rounded-2xl text-left flex items-center gap-3 font-medium text-sm sm:text-base text-slate-200 cursor-pointer';
+                btn.dataset.index = idx;
+                btn.onclick = () => selectOption(idx);
+
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-600 flex items-center justify-center font-bold text-amber-400 text-xs sm:text-sm shrink-0">
+                        ${optionLetters[idx]}
+                    </span>
+                    <span class="flex-1">${opt}</span>
+                `;
+
+                container.appendChild(btn);
+            });
+
+            // Start Timer
+            timeLeft = QUESTION_TIME;
+            updateTimerUI();
+            startTimerInterval();
+        }
+
+        function startTimerInterval() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (isPaused) return;
+                timeLeft -= 0.1;
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    updateTimerUI();
+                    clearInterval(timerInterval);
+                    handleTimeout();
+                } else {
+                    updateTimerUI();
+                }
+            }, 100);
+        }
+
+        function updateTimerUI() {
+            const timerText = document.getElementById('timer-text');
+            const timerBar = document.getElementById('timer-bar');
+
+            timerText.textContent = `${Math.ceil(timeLeft)}s`;
+            const pct = (timeLeft / QUESTION_TIME) * 100;
+            timerBar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+
+            if (timeLeft <= 4) {
+                timerBar.className = "bg-gradient-to-r from-red-600 to-rose-400 h-full rounded-full transition-all duration-100 ease-linear";
+                timerText.className = "text-red-400 font-mono text-sm font-bold animate-pulse";
+            } else {
+                timerBar.className = "bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full transition-all duration-100 ease-linear";
+                timerText.className = "text-amber-400 font-mono text-sm font-bold";
+            }
+        }
+
+        function selectOption(selectedIndex) {
+            if (isPaused) return;
+            clearInterval(timerInterval);
+            disableOptions();
+
+            const q = questions[currentQIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+
+            if (selectedIndex === q.answer) {
+                // Correct Answer
+                playSound('correct');
+                buttons[selectedIndex].classList.add('correct');
+
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+                correctCount++;
+
+                // Score logic: Base 100 + Time Bonus + Streak Bonus
+                const speedBonus = Math.round(timeLeft * 10);
+                const streakBonus = (streak - 1) * 25;
+                const earnedPoints = 100 + speedBonus + streakBonus;
+                score += earnedPoints;
+
+                document.getElementById('current-score').textContent = score;
+                document.getElementById('streak-counter').textContent = `${streak}x Seri`;
+
+            } else {
+                // Wrong Answer
+                playSound('wrong');
+                if (selectedIndex !== -1 && buttons[selectedIndex]) {
+                    buttons[selectedIndex].classList.add('wrong');
+                }
+                // Highlight correct one
+                buttons[q.answer].classList.add('correct');
+                streak = 0;
+                document.getElementById('streak-counter').textContent = `0x Seri`;
+            }
+
+            // Next Question Delay
+            setTimeout(() => {
+                currentQIndex++;
+                loadQuestion();
+            }, 1400);
+        }
+
+        function handleTimeout() {
+            playSound('wrong');
+            disableOptions();
+
+            const q = questions[currentQIndex];
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons[q.answer].classList.add('correct');
+
+            streak = 0;
+            document.getElementById('streak-counter').textContent = `0x Seri`;
+
+            setTimeout(() => {
+                currentQIndex++;
+                loadQuestion();
+            }, 1400);
+        }
+
+        function disableOptions() {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.disabled = true);
+        }
+
+        function enableOptions() {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.disabled = false);
+        }
+
+        /* ===================================================================
+           6. LIFELINES (JOKERLER)
+           =================================================================== */
+        function useLifeline5050() {
+            if (lifeline5050Used || isPaused) return;
+            playSound('lifeline');
+            lifeline5050Used = true;
+
+            const btn5050 = document.getElementById('lifeline-5050');
+            btn5050.disabled = true;
+            btn5050.className = "px-3 py-1.5 rounded-xl bg-slate-800/40 text-slate-600 border border-slate-700 text-xs font-bold opacity-50 cursor-not-allowed";
+
+            const q = questions[currentQIndex];
+            const options = document.querySelectorAll('.option-btn');
+            let removedCount = 0;
+
+            options.forEach((btn, idx) => {
+                if (idx !== q.answer && removedCount < 2) {
+                    btn.style.visibility = 'hidden';
+                    removedCount++;
+                }
+            });
+        }
+
+        function useLifelineTime() {
+            if (lifelineTimeUsed || isPaused) return;
+            playSound('lifeline');
+            lifelineTimeUsed = true;
+
+            const btnTime = document.getElementById('lifeline-time');
+            btnTime.disabled = true;
+            btnTime.className = "px-3 py-1.5 rounded-xl bg-slate-800/40 text-slate-600 border border-slate-700 text-xs font-bold opacity-50 cursor-not-allowed";
+
+            timeLeft = Math.min(QUESTION_TIME, timeLeft + 10);
+            updateTimerUI();
+        }
+
+        /* ===================================================================
+           7. END GAME & RESULT SUMMARY
+           =================================================================== */
+        function endGame() {
+            clearInterval(timerInterval);
+            playSound('gameover');
+
+            // Save High Score
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('pixidus_tarih_highscore', highScore.toString());
+                document.getElementById('top-high-score').textContent = highScore;
+            }
+
+            // Calculations
+            const accuracy = Math.round((correctCount / questions.length) * 100);
+
+            // Determine Rank
+            let rankTitle = "Çaylak Araştırmacı";
+            if (score >= 2500) rankTitle = "Tarih & Kültür Dehası 👑";
+            else if (score >= 1800) rankTitle = "Baş Tarihçi 📜";
+            else if (score >= 1200) rankTitle = "Kültür Aşığı 🏛️";
+            else if (score >= 600) rankTitle = "Meraklı Okur 📖";
+
+            // Update UI
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('rank-badge').textContent = `Ünvan: ${rankTitle}`;
+            document.getElementById('stat-correct').textContent = `${correctCount} / ${questions.length - correctCount}`;
+            document.getElementById('stat-accuracy').textContent = `%${accuracy}`;
+            document.getElementById('stat-streak').textContent = `${maxStreak} Seri`;
+
+            // Screen Switch
+            document.getElementById('quiz-screen').classList.remove('flex');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
