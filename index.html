@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarih Bilgi Yarışması - History Quiz Master</title>
+    <title>Historia Aurora - Gelişmiş Tarih Akademisi & Sınav Merkezi</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -17,13 +17,14 @@
                     colors: {
                         aurora: {
                             bg: '#0B0F19',
-                            card: 'rgba(23, 31, 51, 0.75)',
+                            card: 'rgba(23, 31, 51, 0.8)',
                             border: 'rgba(255, 255, 255, 0.12)',
                             primary: '#6366f1',
                             accent: '#a855f7',
                             neon: '#06b6d4',
                             emerald: '#10b981',
-                            rose: '#f43f5e'
+                            rose: '#f43f5e',
+                            gold: '#f59e0b'
                         }
                     }
                 }
@@ -44,7 +45,7 @@
                         radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
         }
         .glass-panel {
-            background: rgba(23, 31, 51, 0.75);
+            background: rgba(23, 31, 51, 0.8);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -60,38 +61,42 @@
             border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0b0f19; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     </style>
 </head>
 <body class="aurora-bg min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- HEADER -->
+    <!-- TOP HEADER -->
     <header class="w-full p-4 md:px-8 border-b border-gray-800/80 glass-panel sticky top-0 z-40">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('welcome')">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('welcomeScreen')">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/30">
                     <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                        <i class="fa-solid font-bold fa-landmark text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-cyan-300"></i>
+                        <i class="fa-solid fa-landmark text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-cyan-300"></i>
                     </div>
                 </div>
                 <div>
                     <h1 class="font-extrabold text-lg md:text-xl tracking-tight text-white leading-none">
                         HISTORIA <span class="text-cyan-400 text-xs px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 font-semibold">AURORA</span>
                     </h1>
-                    <p class="text-[11px] text-gray-400 font-medium" data-i18n="tagline">Tarih Bilgi Yarışması</p>
+                    <p class="text-[11px] text-gray-400 font-medium">Akademi & Sınav Merkezi</p>
                 </div>
             </div>
 
-            <div class="flex items-center space-x-3 md:space-x-4">
-                <button onclick="openAvatarModal()" class="flex items-center space-x-2 glass-btn px-3 py-1.5 rounded-full hover:border-cyan-400/50 transition">
-                    <div id="headerAvatar" class="w-8 h-8 rounded-full bg-indigo-600/50 border border-cyan-400/40 flex items-center justify-center text-lg shadow-inner">
-                        🧙‍♂️
-                    </div>
-                    <span id="headerUsername" class="text-xs md:text-sm font-semibold text-gray-200 max-w-[90px] md:max-w-[140px] truncate">Tarihçi</span>
-                    <i class="fa-solid fa-pen text-[10px] text-cyan-400"></i>
+            <div class="flex items-center space-x-3">
+                <!-- Rozet / Ödül Sayacı Butonu -->
+                <button onclick="openAwardsModal()" class="flex items-center space-x-1.5 glass-btn px-3 py-1.5 rounded-full border-amber-500/40 hover:border-amber-400 transition">
+                    <i class="fa-solid fa-award text-amber-400"></i>
+                    <span id="headerBadgeCount" class="text-xs font-bold text-amber-300">0 Rozet</span>
                 </button>
 
-                <button onclick="openSettingsModal()" class="glass-btn w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-cyan-400 transition" title="Settings / Ayarlar">
-                    <i class="fa-solid fa-gear text-lg"></i>
+                <!-- Profil Alanı -->
+                <button onclick="openAvatarModal()" class="flex items-center space-x-2 glass-btn px-3 py-1.5 rounded-full hover:border-cyan-400/50 transition">
+                    <div id="headerAvatar" class="w-8 h-8 rounded-full bg-indigo-600/50 border border-cyan-400/40 flex items-center justify-center text-lg">🧙‍♂️</div>
+                    <span id="headerUsername" class="text-xs md:text-sm font-semibold text-gray-200 max-w-[90px] truncate">Tarihçi</span>
                 </button>
             </div>
         </div>
@@ -99,50 +104,509 @@
 
     <!-- MAIN CONTAINER -->
     <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 flex items-center justify-center">
-        <!-- WELCOME SCREEN -->
-        <section id="welcomeScreen" class="w-full max-w-2xl glass-panel rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden my-auto">
-            <div class="text-center space-y-4 mb-8">
-                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 inline-block" data-i18n="badgeWelcome">
-                    ✨ Dünya Tarihini Keşfet
+
+        <!-- 1. WELCOME & MODE SELECTION SCREEN -->
+        <section id="welcomeScreen" class="w-full max-w-2xl glass-panel rounded-3xl p-6 md:p-8 shadow-2xl relative my-auto space-y-6">
+            <div class="text-center space-y-2">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 inline-block">
+                    ✨ KPSS, TYT ve Klasik Tarih Modları
                 </span>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight" data-i18n="mainTitle">
-                    Tarih Bilgini Test Et
-                </h2>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Oyun Modunu Seç</h2>
+                <p class="text-xs md:text-sm text-gray-400 max-w-md mx-auto">Hedefine uygun sınav modunu seç veya olay-yıl eşleştirme mini oyununa başla!</p>
             </div>
 
-            <div class="space-y-6">
-                <!-- Select Question Count -->
-                <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center space-x-2">
-                        <i class="fa-solid fa-list-ol text-cyan-400"></i>
-                        <span data-i18n="selectQuestionCount">Soru Sayısı Seçimi</span>
-                    </label>
-                    <div class="grid grid-cols-4 gap-2 md:gap-3">
-                        <button onclick="setQuestionCount(20)" id="qBtn20" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center border-indigo-500/50 bg-indigo-500/20 text-cyan-300">20</button>
-                        <button onclick="setQuestionCount(50)" id="qBtn50" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center text-gray-300">50</button>
-                        <button onclick="setQuestionCount(100)" id="qBtn100" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center text-gray-300">100</button>
-                        <button onclick="setQuestionCount(200)" id="qBtn200" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center text-gray-300">200</button>
+            <!-- Game Mode Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <button onclick="selectGameMode('classic')" id="modeCard_classic" class="p-4 rounded-2xl glass-btn text-left border-indigo-500/50 bg-indigo-500/20 transition space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-indigo-500/30 flex items-center justify-center text-indigo-300 font-bold"><i class="fa-solid fa-book-open"></i></div>
+                    <h3 class="font-bold text-white text-sm">Klasik Quiz</h3>
+                    <p class="text-[11px] text-gray-400">Dünya ve Türk tarihi genel kültür soruları.</p>
+                </button>
+                <button onclick="selectGameMode('tyt')" id="modeCard_tyt" class="p-4 rounded-2xl glass-btn text-left transition space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-purple-500/30 flex items-center justify-center text-purple-300 font-bold"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3 class="font-bold text-white text-sm">TYT Tarih</h3>
+                    <p class="text-[11px] text-gray-400">ÖSYM tarzı yorum ve bilgi odaklı TYT soruları.</p>
+                </button>
+                <button onclick="selectGameMode('kpss')" id="modeCard_kpss" class="p-4 rounded-2xl glass-btn text-left transition space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-500/30 flex items-center justify-center text-cyan-300 font-bold"><i class="fa-solid fa-landmark-dome"></i></div>
+                    <h3 class="font-bold text-white text-sm">KPSS Tarih</h3>
+                    <p class="text-[11px] text-gray-400">İslamiyet öncesi, Osmanlı ve İnkılap tarihi detayları.</p>
+                </button>
+            </div>
+
+            <!-- Mini Game Option -->
+            <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-purple-500/10 border border-amber-500/30 flex items-center justify-between">
+                <div>
+                    <h4 class="font-bold text-amber-300 text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-puzzle-piece"></i><span>Tarih Olay-Yıl Eşleştirme Oyunu</span>
+                    </h4>
+                    <p class="text-[11px] text-gray-400">Tarihi olayları doğru yıllarıyla eşleştirerek refleksini test et.</p>
+                </div>
+                <button onclick="startMatchingGame()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition shadow-md">
+                    Başla
+                </button>
+            </div>
+
+            <!-- Soru Sayısı ve Başlat -->
+            <div class="space-y-3 pt-2 border-t border-gray-800">
+                <div class="flex justify-between items-center">
+                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Soru Sayısı</label>
+                    <div class="flex space-x-2">
+                        <button onclick="setQuestionCount(10)" id="qBtn10" class="q-count-btn px-3 py-1.5 rounded-lg glass-btn text-xs font-bold text-cyan-300 bg-cyan-500/20 border-cyan-500/50">10</button>
+                        <button onclick="setQuestionCount(20)" id="qBtn20" class="q-count-btn px-3 py-1.5 rounded-lg glass-btn text-xs font-bold text-gray-300">20</button>
+                        <button onclick="setQuestionCount(50)" id="qBtn50" class="q-count-btn px-3 py-1.5 rounded-lg glass-btn text-xs font-bold text-gray-300">50</button>
                     </div>
                 </div>
 
-                <button onclick="startGame()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 font-extrabold text-white text-lg shadow-xl transition transform active:scale-[0.98]">
+                <button onclick="startQuiz()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 font-extrabold text-white text-base shadow-xl transition transform active:scale-[0.98]">
                     Yarışmayı Başlat
                 </button>
             </div>
         </section>
+
+        <!-- 2. QUIZ GAMEPLAY SCREEN -->
+        <section id="quizScreen" class="w-full max-w-3xl glass-panel rounded-3xl p-5 md:p-8 shadow-2xl hidden relative space-y-5">
+            <div class="flex justify-between items-center pb-3 border-b border-gray-800">
+                <div class="flex items-center space-x-3">
+                    <span id="quizModeBadge" class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Klasik</span>
+                    <div>
+                        <span class="text-xs text-gray-400">Soru</span>
+                        <p class="text-sm font-extrabold text-white"><span id="currentQNum">1</span> / <span id="totalQNum">10</span></p>
+                    </div>
+                </div>
+                <div class="text-center font-mono text-xl font-black text-cyan-400" id="timerDisplay">20s</div>
+                <div class="text-right">
+                    <span class="text-xs text-gray-400">Puan</span>
+                    <p id="scoreDisplay" class="text-base font-black text-emerald-400">0</p>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-950/60 h-2 rounded-full overflow-hidden border border-white/5">
+                <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-900/70 border border-indigo-500/20 rounded-2xl p-5 md:p-6 space-y-3">
+                <h3 id="questionText" class="text-base md:text-lg font-bold text-white leading-relaxed">Soru yükleniyor...</h3>
+            </div>
+
+            <!-- Options -->
+            <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+
+            <!-- Explanation -->
+            <div id="explanationBox" class="hidden p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 text-xs md:text-sm text-cyan-200">
+                <p class="font-bold mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Açıklama:</p>
+                <p id="explanationText"></p>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="nextBtn" onclick="nextQuestion()" disabled class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white font-extrabold text-xs transition">
+                    Sonraki Soru <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. MATCHING MINI-GAME SCREEN -->
+        <section id="matchingScreen" class="w-full max-w-3xl glass-panel rounded-3xl p-6 md:p-8 shadow-2xl hidden relative space-y-6">
+            <div class="flex justify-between items-center pb-3 border-b border-gray-800">
+                <div>
+                    <h3 class="text-lg font-black text-amber-300"><i class="fa-solid fa-puzzle-piece mr-2"></i> Olay & Yıl Eşleştirme</h3>
+                    <p class="text-xs text-gray-400">Soldaki tarihi olaya tıklayın, ardından sağdaki doğru yıla tıklayarak eşleştirin.</p>
+                </div>
+                <button onclick="showScreen('welcomeScreen')" class="px-3 py-1.5 rounded-xl glass-btn text-xs text-gray-300">Menüye Dön</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Events Column -->
+                <div class="space-y-2.5">
+                    <h4 class="text-xs font-bold uppercase text-gray-400 tracking-wider">Tarihi Olaylar</h4>
+                    <div id="matchingEventsContainer" class="space-y-2"></div>
+                </div>
+                <!-- Years Column -->
+                <div class="space-y-2.5">
+                    <h4 class="text-xs font-bold uppercase text-gray-400 tracking-wider">Yıllar</h4>
+                    <div id="matchingYearsContainer" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <div class="text-center pt-2">
+                <p id="matchingScoreText" class="text-sm font-bold text-emerald-400">Eşleşen: 0 / 4</p>
+            </div>
+        </section>
+
+        <!-- 4. RESULTS SCREEN -->
+        <section id="resultScreen" class="w-full max-w-md glass-panel rounded-3xl p-6 md:p-8 shadow-2xl text-center hidden my-auto space-y-5">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-amber-400 to-indigo-600 flex items-center justify-center text-3xl shadow-xl">
+                🏆
+            </div>
+            <div>
+                <h2 class="text-2xl font-black text-white">Yarışma Tamamlandı!</h2>
+                <p class="text-xs text-gray-400">Performans sonuçların ve kazandığın ödüller:</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/80 border border-amber-500/30 space-y-1">
+                <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Toplam Puan</span>
+                <div id="finalScoreVal" class="text-3xl font-black text-amber-400">0</div>
+            </div>
+
+            <div id="newBadgeAlert" class="hidden p-3 rounded-xl bg-amber-500/20 border border-amber-500/40 text-xs font-bold text-amber-300 animate-pulse">
+                🎉 Yeni Bir Rozet Kazandın!
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="startQuiz()" class="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition">Tekrar Oyna</button>
+                <button onclick="showScreen('welcomeScreen')" class="flex-1 py-3 rounded-xl glass-btn text-gray-200 font-bold text-xs transition">Ana Menü</button>
+            </div>
+        </section>
     </main>
 
+    <!-- FOOTER -->
     <footer class="w-full p-4 text-center text-xs text-gray-500 border-t border-gray-800/50 glass-panel">
-        <p>© 2026 Historia Aurora Quiz</p>
+        <p>© 2026 Historia Aurora - Ödül ve Sınav Modüllü Eğitim Platformu</p>
     </footer>
 
+    <!-- MODAL: AWARDS / BADGES -->
+    <div id="awardsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-amber-500/30 shadow-2xl space-y-4">
+            <button onclick="closeAwardsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-extrabold text-white flex items-center space-x-2">
+                <i class="fa-solid fa-award text-amber-400"></i><span>Başarı Rozetleri ve Ödüller</span>
+            </h3>
+            <p class="text-xs text-gray-400">Soruları çözerek, yüksek skorlar elde ederek rozetlerin kilidini açabilirsin.</p>
+            
+            <div id="badgesGrid" class="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1">
+                <!-- Dynamic badges rendered via JS -->
+            </div>
+
+            <button onclick="closeAwardsModal()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">Kapat</button>
+        </div>
+    </div>
+
+    <!-- MODAL: AVATAR & PROFILE -->
+    <div id="avatarModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-6 relative border border-cyan-500/30 shadow-2xl space-y-4">
+            <button onclick="closeAvatarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-lg font-extrabold text-white">Profil Düzenle</h3>
+            <div>
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Oyuncu İsmi</label>
+                <input type="text" id="usernameInput" maxlength="15" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-gray-700 text-white text-xs focus:outline-none focus:border-cyan-400" value="Tarihçi">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Avatar Seç</label>
+                <div class="grid grid-cols-4 gap-2 text-xl">
+                    <button onclick="setAvatar('🧙‍♂️')" class="p-2 rounded-xl glass-btn">🧙‍♂️</button>
+                    <button onclick="setAvatar('⚔️')" class="p-2 rounded-xl glass-btn">⚔️</button>
+                    <button onclick="setAvatar('📜')" class="p-2 rounded-xl glass-btn">📜</button>
+                    <button onclick="setAvatar('👑')" class="p-2 rounded-xl glass-btn">👑</button>
+                </div>
+            </div>
+            <button onclick="saveProfile()" class="w-full py-2.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs transition">Kaydet</button>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
     <script>
-        let targetQuestionCount = 20;
-        function setQuestionCount(count) {
-            targetQuestionCount = count;
+        // --- DATA SYSTEM (Classic, TYT, KPSS & Awards) ---
+        const questionsDB = {
+            classic: [
+                { q: "Osmanlı Devleti'nin ilk başkenti neresidir?", options: ["Söğüt", "Bursa", "Edirne", "İstanbul"], correct: 0, exp: "Osmanlı'nın ilk idari merkezi Söğüt ve ardından Karacahisar'dır." },
+                { q: "İstanbul hangi yıl fethedilmiştir?", options: ["1453", "1299", "1071", "1517"], correct: 0, exp: "29 Mayıs 1453'te Fatih Sultan Mehmet tarafından fethedilmiştir." },
+                { q: "Malazgirt Savaşı hangi yıl yapılmıştır?", options: ["1071", "1176", "1243", "1389"], correct: 0, exp: "1071 yılında Alparslan komutasındaki Selçuklular zafer kazanmıştır." }
+            ],
+            tyt: [
+                { q: "İslamiyet öncesi Türk devletlerinde kurultay adı verilen meclisin başkanı kimdir?", options: ["Kağan", "Ayukı", "Tarkan", "Şad"], correct: 0, exp: "Kurultaya hakan yani kağan başkanlık eder." },
+                { q: "Kavimler Göçü'nün sonuçları arasında aşağıdakilerden hangisi yer almaz?", options: ["Roma İmparatorluğu'nun ikiye bölünmesi", "Feodalitenin ortaya çıkması", "Avrupa'da Türk devletinin kurulması", "Anadolu'nun Türkleşmesi"], correct: 3, exp: "Anadolu'nun Türkleşmesi daha sonraki yüzyıllarda gerçekleşmiştir." }
+            ],
+            kpss: [
+                { q: "Osmanlı Devleti'nde 'Mîrî Arazi' türü aşağıdakilerden hangisine aittir?", options: ["Devlete", "Vakıflara", "Özel şahıslara", "Hazine-i Hassa'ya"], correct: 0, exp: "Mîrî arazinin mülkiyeti doğrudan devlete (miri) aittir." },
+                { q: "I. TBMM döneminde çıkarılan ilk kanun aşağıdakilerden hangisidir?", options: ["Ağnam Vergisi Kanunu", "Hıyanet-i Vataniye Kanunu", "Teşkilat-ı Esasiye", "İstiklal Mahkemeleri Kanunu"], correct: 0, exp: "I. TBMM'nin çıkardığı ilk kanun Ağnam Vergisi Kanunu'dur." }
+            ]
+        };
+
+        let userProfile = { name: "Tarihçi", avatar: "🧙‍♂️", badges: [], score: 0 };
+        let currentMode = 'classic';
+        let questionCount = 10;
+        let activeQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let timer = null;
+        let timeLeft = 20;
+        let answered = false;
+
+        // Rozet Tanımları
+        const allBadges = [
+            { id: 'first_win', name: 'İlk Adım', desc: 'İlk yarışmanı tamamla', icon: '🎯', unlocked: false },
+            { id: 'high_score', name: 'Tarih Uzmanı', desc: '300 puan barajını aş', icon: '📜', unlocked: false },
+            { id: 'kpss_master', name: 'Memur Adayı', desc: 'KPSS modunu başarıyla bitir', icon: '🏛️', unlocked: false }
+        ];
+
+        function showScreen(id) {
+            ['welcomeScreen', 'quizScreen', 'matchingScreen', 'resultScreen'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+            });
+            document.getElementById(id).classList.remove('hidden');
         }
-        function startGame() {
-            alert(targetQuestionCount + " soruluk yarışma başlatılıyor!");
+
+        function selectGameMode(mode) {
+            currentMode = mode;
+            ['classic', 'tyt', 'kpss'].forEach(m => {
+                const btn = document.getElementById(`modeCard_${m}`);
+                btn.className = "p-4 rounded-2xl glass-btn text-left transition space-y-2";
+            });
+            const active = document.getElementById(`modeCard_${mode}`);
+            active.className = "p-4 rounded-2xl glass-btn text-left border-indigo-500/50 bg-indigo-500/25 transition space-y-2";
+            playSound('click');
+        }
+
+        function setQuestionCount(cnt) {
+            questionCount = cnt;
+            document.querySelectorAll('.q-count-btn').forEach(b => {
+                b.className = "q-count-btn px-3 py-1.5 rounded-lg glass-btn text-xs font-bold text-gray-300";
+            });
+            const btn = document.getElementById(`qBtn${cnt}`);
+            btn.className = "q-count-btn px-3 py-1.5 rounded-lg glass-btn text-xs font-bold text-cyan-300 bg-cyan-500/20 border-cyan-500/50";
+        }
+
+        function startQuiz() {
+            let pool = questionsDB[currentMode] || questionsDB.classic;
+            activeQuestions = [];
+            while(activeQuestions.length < questionCount) {
+                activeQuestions.push(...JSON.parse(JSON.stringify(pool)));
+            }
+            activeQuestions = activeQuestions.slice(0, questionCount);
+
+            currentIndex = 0;
+            score = 0;
+            document.getElementById('totalQNum').innerText = activeQuestions.length;
+            document.getElementById('quizModeBadge').innerText = currentMode.toUpperCase();
+            showScreen('quizScreen');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            answered = false;
+            document.getElementById('explanationBox').classList.add('hidden');
+            document.getElementById('nextBtn').disabled = true;
+
+            const q = activeQuestions[currentIndex];
+            document.getElementById('currentQNum').innerText = currentIndex + 1;
+            document.getElementById('questionText').innerText = q.q;
+            document.getElementById('scoreDisplay').innerText = score;
+            document.getElementById('progressBar').style.width = `${((currentIndex+1)/activeQuestions.length)*100}%`;
+
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-3.5 rounded-xl glass-btn text-left text-xs md:text-sm font-semibold text-gray-200 hover:text-white border border-white/10 transition";
+                btn.onclick = () => selectOption(idx);
+                btn.innerHTML = `<span>${opt}</span>`;
+                grid.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = 20;
+            document.getElementById('timerDisplay').innerText = timeLeft + 's';
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timerDisplay').innerText = timeLeft + 's';
+                if(timeLeft <= 0) {
+                    clearInterval(timer);
+                    autoTimeout();
+                }
+            }, 1000);
+        }
+
+        function selectOption(idx) {
+            if(answered) return;
+            answered = true;
+            clearInterval(timer);
+
+            const q = activeQuestions[currentIndex];
+            const buttons = document.querySelectorAll('#optionsGrid button');
+
+            if(idx === q.correct) {
+                playSound('correct');
+                score += 100 + (timeLeft * 2);
+                buttons[idx].classList.add('bg-emerald-600/40', 'border-emerald-500');
+            } else {
+                playSound('wrong');
+                buttons[idx].classList.add('bg-rose-600/40', 'border-rose-500');
+                buttons[q.correct].classList.add('bg-emerald-600/40', 'border-emerald-500');
+            }
+
+            document.getElementById('explanationText').innerText = q.exp;
+            document.getElementById('explanationBox').classList.remove('hidden');
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function autoTimeout() {
+            if(answered) return;
+            answered = true;
+            const q = activeQuestions[currentIndex];
+            const buttons = document.querySelectorAll('#optionsGrid button');
+            buttons[q.correct].classList.add('bg-emerald-600/40', 'border-emerald-500');
+            document.getElementById('explanationText').innerText = q.exp;
+            document.getElementById('explanationBox').classList.remove('hidden');
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if(currentIndex < activeQuestions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('finalScoreVal').innerText = score;
+            checkBadges();
+            showScreen('resultScreen');
+            playSound('success');
+        }
+
+        // --- MATCHING MINI-GAME LOGIC ---
+        const matchingData = [
+            { event: "İstanbul'un Fethi", year: "1453" },
+            { event: "Malazgirt Savaşı", year: "1071" },
+            { event: "Cumhuriyetin İlanı", year: "1923" },
+            { event: "Talas Savaşı", year: "751" }
+        ];
+        let selectedEvent = null;
+        let matchedCount = 0;
+
+        function startMatchingGame() {
+            matchedCount = 0;
+            selectedEvent = null;
+            document.getElementById('matchingScoreText').innerText = `Eşleşen: 0 / ${matchingData.length}`;
+            showScreen('matchingScreen');
+
+            let shuffledEvents = [...matchingData].sort(() => Math.random() - 0.5);
+            let shuffledYears = [...matchingData].sort(() => Math.random() - 0.5);
+
+            let evContainer = document.getElementById('matchingEventsContainer');
+            let yrContainer = document.getElementById('matchingYearsContainer');
+            evContainer.innerHTML = '';
+            yrContainer.innerHTML = '';
+
+            shuffledEvents.forEach(item => {
+                let btn = document.createElement('button');
+                btn.className = "w-full p-3 rounded-xl glass-btn text-xs font-semibold text-left text-gray-200 transition";
+                btn.innerText = item.event;
+                btn.onclick = () => selectMatchingEvent(item.event, btn);
+                evContainer.appendChild(btn);
+            });
+
+            shuffledYears.forEach(item => {
+                let btn = document.createElement('button');
+                btn.className = "w-full p-3 rounded-xl glass-btn text-xs font-semibold text-center text-gray-200 transition";
+                btn.innerText = item.year;
+                btn.onclick = () => selectMatchingYear(item.year, btn);
+                yrContainer.appendChild(btn);
+            });
+        }
+
+        let selectedEventBtn = null;
+        function selectMatchingEvent(ev, btn) {
+            document.querySelectorAll('#matchingEventsContainer button').forEach(b => b.classList.remove('border-amber-400', 'bg-amber-500/20'));
+            btn.classList.add('border-amber-400', 'bg-amber-500/20');
+            selectedEvent = ev;
+            selectedEventBtn = btn;
+        }
+
+        function selectMatchingYear(yr, btn) {
+            if(!selectedEvent) return;
+            let correctObj = matchingData.find(x => x.event === selectedEvent);
+            if(correctObj && correctObj.year === yr) {
+                playSound('correct');
+                selectedEventBtn.disabled = true;
+                btn.disabled = true;
+                selectedEventBtn.classList.add('opacity-40', 'bg-emerald-500/20');
+                btn.classList.add('opacity-40', 'bg-emerald-500/20');
+                matchedCount++;
+                document.getElementById('matchingScoreText').innerText = `Eşleşen: ${matchedCount} / ${matchingData.length}`;
+                selectedEvent = null;
+                if(matchedCount === matchingData.length) {
+                    setTimeout(() => alert('Tebrikler! Tüm eşleşmeleri doğru tamamladın!'), 300);
+                }
+            } else {
+                playSound('wrong');
+                btn.classList.add('bg-rose-500/30');
+                setTimeout(() => btn.classList.remove('bg-rose-500/30'), 500);
+            }
+        }
+
+        // --- BADGE SYSTEM ---
+        function checkBadges() {
+            let alertBox = document.getElementById('newBadgeAlert');
+            alertBox.classList.add('hidden');
+
+            if(!allBadges[0].unlocked) {
+                allBadges[0].unlocked = true;
+                triggerNewBadge();
+            }
+            if(score >= 300 && !allBadges[1].unlocked) {
+                allBadges[1].unlocked = true;
+                triggerNewBadge();
+            }
+            if(currentMode === 'kpss' && !allBadges[2].unlocked) {
+                allBadges[2].unlocked = true;
+                triggerNewBadge();
+            }
+            updateBadgeUI();
+        }
+
+        function triggerNewBadge() {
+            let alertBox = document.getElementById('newBadgeAlert');
+            alertBox.classList.remove('hidden');
+        }
+
+        function updateBadgeUI() {
+            let unlockedCount = allBadges.filter(b => b.unlocked).length;
+            document.getElementById('headerBadgeCount').innerText = `${unlockedCount} Rozet`;
+        }
+
+        function openAwardsModal() {
+            let grid = document.getElementById('badgesGrid');
+            grid.innerHTML = '';
+            allBadges.forEach(b => {
+                let div = document.createElement('div');
+                div.className = `p-3 rounded-2xl border flex items-center space-x-3 ${b.unlocked ? 'bg-amber-500/10 border-amber-500/40 text-white' : 'bg-slate-900/40 border-gray-800 text-gray-500'}`;
+                div.innerHTML = `<span class="text-2xl">${b.icon}</span><div><p class="text-xs font-bold">${b.name}</p><p class="text-[10px] text-gray-400">${b.desc}</p></div>`;
+                grid.appendChild(div);
+            });
+            document.getElementById('awardsModal').classList.remove('hidden');
+        }
+        function closeAwardsModal() { document.getElementById('awardsModal').classList.add('hidden'); }
+
+        // --- PROFILE MODAL ---
+        function openAvatarModal() { document.getElementById('avatarModal').classList.remove('hidden'); }
+        function closeAvatarModal() { document.getElementById('avatarModal').classList.add('hidden'); }
+        function setAvatar(av) { userProfile.avatar = av; }
+        function saveProfile() {
+            let name = document.getElementById('usernameInput').value.trim();
+            if(name) userProfile.name = name;
+            document.getElementById('headerUsername').innerText = userProfile.name;
+            document.getElementById('headerAvatar').innerText = userProfile.avatar;
+            closeAvatarModal();
+        }
+
+        // --- SOUND FX (Tone.js) ---
+        function playSound(type) {
+            try {
+                const synth = new Tone.Synth().toDestination();
+                if(type === 'correct') synth.triggerAttackRelease("G5", "8n");
+                else if(type === 'wrong') synth.triggerAttackRelease("C3", "8n");
+                else if(type === 'success') synth.triggerAttackRelease("C5", "4n");
+                else synth.triggerAttackRelease("E5", "16n");
+            } catch(e) {}
         }
     </script>
 </body>
