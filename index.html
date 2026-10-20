@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaman Tüneli Akademi - Türk Tarihi ve YKS Sınav Merkezi</title>
+    <title>Zaman Tüneli Akademi - YKS Sınav ve Bilgi Merkezi</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -64,18 +64,21 @@
             </div>
             <div>
                 <h1 class="title-font text-base md:text-lg font-bold text-amber-400 tracking-wide">ZAMAN TÜNELİ AKADEMİ</h1>
-                <p class="text-[11px] text-gray-400">Türk Tarihi & YKS Sınav Merkezi</p>
+                <p class="text-[11px] text-gray-400">YKS Sınav ve Bilgi Merkezi</p>
             </div>
         </div>
 
-        <div class="flex items-center space-x-3">
-            <button onclick="openAwardsModal()" class="flex items-center space-x-1.5 glass-btn px-3 py-1.5 rounded-xl border-amber-500/40 text-amber-300 text-xs font-bold">
+        <div class="flex items-center space-x-2">
+            <button onclick="openAwardsModal()" class="flex items-center space-x-1.5 glass-btn px-3 py-1.5 rounded-xl border-amber-500/40 text-amber-300 text-xs font-bold" title="Rozetler">
                 <i class="fa-solid fa-award text-amber-400"></i>
                 <span id="headerBadgeCount">0 Rozet</span>
             </button>
-            <button onclick="openAvatarModal()" class="flex items-center space-x-2 glass-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-200">
+            <button onclick="openSettingsModal()" class="glass-btn w-9 h-9 rounded-xl flex items-center justify-center text-amber-400 text-sm" title="Ayarlar">
+                <i class="fa-solid fa-gear"></i>
+            </button>
+            <button onclick="openAvatarModal()" class="flex items-center space-x-2 glass-btn px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-200" title="Profil">
                 <span id="headerAvatar">🐺</span>
-                <span id="headerUsername" class="max-w-[80px] truncate">Alp</span>
+                <span id="headerUsername" class="max-w-[70px] truncate">Alp</span>
             </button>
         </div>
     </header>
@@ -84,63 +87,56 @@
     <main class="w-full max-w-4xl mx-auto flex-1 flex items-center justify-center">
 
         <!-- 1. WELCOME SCREEN -->
-        <section id="welcomeScreen" class="w-full max-w-xl glass-panel rounded-3xl p-6 md:p-8 text-center space-y-6 my-auto">
-            <div class="w-20 h-20 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-3xl shadow-inner">
-                <i class="fa-solid fa-landmark"></i>
+        <section id="welcomeScreen" class="w-full max-w-xl glass-panel rounded-3xl p-6 md:p-8 text-center space-y-5 my-auto">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-inner">
+                <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <div>
-                <h2 class="title-font text-2xl md:text-3xl font-extrabold text-amber-400 mb-2">Zaman Tünelinde Tarih Yolculuğu</h2>
-                <p class="text-xs md:text-sm text-gray-300">YKS, TYT ve AYT tarih sınavlarına yönelik haritalı ve görselli sorularla eksiksiz hazırlan!</p>
+                <h2 class="title-font text-2xl md:text-3xl font-extrabold text-amber-400 mb-1">YKS Hazırlık Akademisi</h2>
+                <p class="text-xs md:text-sm text-gray-300">Dersini seç, görselli ve haritalı sorularla YKS'ye kusursuz hazırlan!</p>
             </div>
 
-            <!-- Mode Selection Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <button onclick="selectGameMode('yks_tyt')" id="mode_yks_tyt" class="p-3.5 rounded-2xl glass-btn text-left border-amber-500/50 bg-amber-500/20 space-y-1">
-                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-graduation-cap mr-1"></i> YKS - TYT Tarih</div>
-                    <p class="text-[10px] text-gray-400">ÖSYM tarzı yorum ve kavram soruları.</p>
+            <!-- Subject Selection Grid -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="selectSubject('tarih')" id="subj_tarih" class="p-3.5 rounded-2xl glass-btn text-left border-amber-500/50 bg-amber-500/20 space-y-1">
+                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-landmark mr-1"></i> Tarih</div>
+                    <p class="text-[10px] text-gray-400">Türk & Dünya Tarihi, İnkılap</p>
                 </button>
-                <button onclick="selectGameMode('osmanli')" id="mode_osmanli" class="p-3.5 rounded-2xl glass-btn text-left space-y-1">
-                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-crown mr-1"></i> Osmanlı & Kültür</div>
-                    <p class="text-[10px] text-gray-400">Teşkilat, kültür ve medeniyet tarihi.</p>
+                <button onclick="selectSubject('cografya')" id="subj_cografya" class="p-3.5 rounded-2xl glass-btn text-left space-y-1">
+                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-earth-americas mr-1"></i> Coğrafya</div>
+                    <p class="text-[10px] text-gray-400">Haritalar, İklimler ve Yerşekilleri</p>
                 </button>
-                <button onclick="selectGameMode('inkilap')" id="mode_inkilap" class="p-3.5 rounded-2xl glass-btn text-left space-y-1">
-                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-star-and-crescent mr-1"></i> İnkılap Tarihi</div>
-                    <p class="text-[10px] text-gray-400">Milli Mücadele ve Atatürk dönemi.</p>
+                <button onclick="selectSubject('edebiyat')" id="subj_edebiyat" class="p-3.5 rounded-2xl glass-btn text-left space-y-1">
+                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-book-open mr-1"></i> Edebiyat</div>
+                    <p class="text-[10px] text-gray-400">Yazarlar, Eserler ve Dönemler</p>
                 </button>
-            </div>
-
-            <!-- Mini Game Trigger -->
-            <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 to-red-500/10 border border-amber-500/30 flex items-center justify-between">
-                <div class="text-left">
-                    <h4 class="font-bold text-amber-300 text-xs"><i class="fa-solid fa-puzzle-piece mr-1"></i> Olay-Yıl Eşleştirme Mini Oyunu</h4>
-                    <p class="text-[10px] text-gray-400">Tarihi olayları doğru yıllarıyla eşleştir.</p>
-                </div>
-                <button onclick="startMatchingGame()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition">
-                    Oyna
+                <button onclick="selectSubject('matematik')" id="subj_matematik" class="p-3.5 rounded-2xl glass-btn text-left space-y-1">
+                    <div class="text-amber-400 font-bold text-xs"><i class="fa-solid fa-calculator mr-1"></i> Matematik</div>
+                    <p class="text-[10px] text-gray-400">Temel Kavramlar ve Problemler</p>
                 </button>
             </div>
 
-            <button onclick="startQuiz()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-red-600 font-extrabold text-slate-950 text-base shadow-xl uppercase tracking-wider transition transform active:scale-95">
-                Yarışmayı Başlat
+            <button onclick="startQuiz()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-red-600 font-extrabold text-slate-950 text-base shadow-xl uppercase tracking-wider transition transform active:scale-95">
+                Sınavı Başlat
             </button>
         </section>
 
-        <!-- 2. QUIZ SCREEN WITH IMAGES / MAPS -->
+        <!-- 2. QUIZ SCREEN -->
         <section id="quizScreen" class="w-full max-w-2xl glass-panel rounded-3xl p-5 md:p-7 hidden relative space-y-4">
             <div class="flex justify-between items-center pb-3 border-b border-gray-700">
                 <div class="flex items-center space-x-2">
-                    <span id="quizModeBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">YKS</span>
-                    <span class="text-xs text-gray-400">Soru: <strong id="currentQNum" class="text-amber-400">1</strong> / <span id="totalQNum">10</span></span>
+                    <span id="quizSubjBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">TARİH</span>
+                    <span class="text-xs text-gray-400">Soru: <strong id="currentQNum" class="text-amber-400">1</strong> / <span id="totalQNum">4</span></span>
                 </div>
                 <div id="timerDisplay" class="font-mono text-base font-bold text-amber-400">20s</div>
                 <div class="text-xs text-gray-400">Puan: <strong id="scoreDisplay" class="text-emerald-400 text-sm">0</strong></div>
             </div>
 
             <!-- Visual / Map Container -->
-            <div id="visualContainer" class="w-full h-44 rounded-2xl bg-slate-900/80 border border-amber-500/30 overflow-hidden relative flex items-center justify-center">
-                <img id="questionImage" src="" alt="Tarihi Görsel / Harita" class="w-full h-full object-cover opacity-85">
+            <div id="visualContainer" class="w-full h-40 rounded-2xl bg-slate-900/80 border border-amber-500/30 overflow-hidden relative flex items-center justify-center">
+                <img id="questionImage" src="" alt="Görsel / Harita" class="w-full h-full object-cover opacity-85">
                 <div class="absolute bottom-2 left-2 bg-slate-950/80 px-2.5 py-1 rounded-lg border border-amber-500/30 text-[10px] text-amber-300 font-semibold flex items-center gap-1">
-                    <i class="fa-solid fa-map-location-dot"></i> <span id="visualCaption">Tarihi Harita / Eser</span>
+                    <i class="fa-solid fa-image"></i> <span id="visualCaption">Soru Görseli / Harita</span>
                 </div>
             </div>
 
@@ -152,7 +148,7 @@
 
             <!-- Explanation Box -->
             <div id="explanationBox" class="hidden p-3.5 rounded-xl bg-slate-900/90 border border-amber-500/30 text-xs text-amber-200">
-                <p class="font-bold mb-1"><i class="fa-solid fa-scroll mr-1"></i> Zaman Tüneli Notu:</p>
+                <p class="font-bold mb-1"><i class="fa-solid fa-lightbulb mr-1"></i> Çözüm / Bilgi:</p>
                 <p id="explanationText"></p>
             </div>
 
@@ -163,40 +159,21 @@
             </div>
         </section>
 
-        <!-- 3. MATCHING MINI GAME -->
-        <section id="matchingScreen" class="w-full max-w-2xl glass-panel rounded-3xl p-6 hidden relative space-y-5">
-            <div class="flex justify-between items-center pb-3 border-b border-gray-700">
-                <h3 class="text-sm font-bold text-amber-400"><i class="fa-solid fa-puzzle-piece mr-2"></i> Olay & Yıl Eşleştirme</h3>
-                <button onclick="showScreen('welcomeScreen')" class="px-3 py-1 rounded-lg glass-btn text-xs text-gray-300">Menüye Dön</button>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-2">
-                    <h4 class="text-[11px] font-bold text-gray-400 uppercase">Tarihi Olaylar</h4>
-                    <div id="matchingEventsContainer" class="space-y-2"></div>
-                </div>
-                <div class="space-y-2">
-                    <h4 class="text-[11px] font-bold text-gray-400 uppercase">Yıllar</h4>
-                    <div id="matchingYearsContainer" class="space-y-2"></div>
-                </div>
-            </div>
-            <p id="matchingScoreText" class="text-center text-xs font-bold text-amber-300">Eşleşen: 0 / 4</p>
-        </section>
-
-        <!-- 4. RESULT SCREEN -->
+        <!-- 3. RESULT SCREEN -->
         <section id="resultScreen" class="w-full max-w-md glass-panel rounded-3xl p-6 text-center hidden my-auto space-y-4">
             <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-2xl text-amber-400">
                 <i class="fa-solid fa-trophy"></i>
             </div>
-            <h2 class="title-font text-2xl font-bold text-amber-400">Zaman Tüneli Seferi Tamamlandı!</h2>
+            <h2 class="title-font text-2xl font-bold text-amber-400">Test Tamamlandı!</h2>
             <div class="p-4 rounded-2xl bg-slate-900/80 border border-amber-500/30">
                 <span class="text-xs text-gray-400 uppercase">Toplam Puan</span>
                 <div id="finalScoreVal" class="text-3xl font-black text-amber-400">0</div>
             </div>
             <div id="newBadgeAlert" class="hidden p-2.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-xs font-bold text-amber-300 animate-pulse">
-                🎉 Yeni Bir Zaman Tüneli Rozeti Kazandın!
+                🎉 Yeni Bir Başarı Rozeti Kazandın!
             </div>
             <div class="flex gap-2">
-                <button onclick="startQuiz()" class="flex-1 py-3 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Yeniden Başla</button>
+                <button onclick="startQuiz()" class="flex-1 py-3 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Tekrar Çöz</button>
                 <button onclick="showScreen('welcomeScreen')" class="flex-1 py-3 rounded-xl glass-btn text-gray-200 font-bold text-xs">Ana Menü</button>
             </div>
         </section>
@@ -207,11 +184,41 @@
         <span>Zaman Tüneli Akademi &copy; 2026</span>
     </footer>
 
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-6 relative border border-amber-500/30 space-y-4">
+            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="title-font text-base font-bold text-amber-400"><i class="fa-solid fa-gear mr-2"></i> Ayarlar</h3>
+            
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-300 font-semibold">Ses Efektleri</span>
+                    <input type="checkbox" id="soundToggle" checked class="w-4 h-4 accent-amber-500 cursor-pointer">
+                </div>
+                <div class="space-y-1">
+                    <div class="flex justify-between text-[11px] text-gray-400">
+                        <span>Ses Şiddeti</span>
+                        <span id="volLabel">80%</span>
+                    </div>
+                    <input type="range" id="volSlider" min="0" max="100" value="80" oninput="document.getElementById('volLabel').innerText=this.value+'%'" class="w-full accent-amber-500 h-1 bg-slate-800 rounded">
+                </div>
+                <div class="space-y-1">
+                    <label class="block text-[11px] text-gray-400">Arayüz Dili</label>
+                    <select id="langSelect" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-gray-700 text-white text-xs">
+                        <option value="tr">🇹🇷 Türkçe</option>
+                        <option value="en">🇬🇧 English</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="closeSettingsModal()" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Kaydet ve Kapat</button>
+        </div>
+    </div>
+
     <!-- AWARDS MODAL -->
     <div id="awardsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-amber-500/30 space-y-3">
             <button onclick="closeAwardsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="title-font text-base font-bold text-amber-400"><i class="fa-solid fa-award mr-2"></i> Şanlı Nişanlar & Rozetler</h3>
+            <h3 class="title-font text-base font-bold text-amber-400"><i class="fa-solid fa-award mr-2"></i> Başarı Nişanları</h3>
             <div id="badgesGrid" class="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto pr-1"></div>
             <button onclick="closeAwardsModal()" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">Kapat</button>
         </div>
@@ -221,9 +228,9 @@
     <div id="avatarModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="glass-panel w-full max-w-sm rounded-3xl p-6 relative border border-amber-500/30 space-y-3">
             <button onclick="closeAvatarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="title-font text-base font-bold text-amber-400">Alp / Hatun Profili</h3>
+            <h3 class="title-font text-base font-bold text-amber-400">Öğrenci Profili</h3>
             <div>
-                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">İsim / Unvan</label>
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-1">Adınız / Unvanınız</label>
                 <input type="text" id="usernameInput" maxlength="15" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-gray-700 text-white text-xs" value="Alp">
             </div>
             <div>
@@ -231,7 +238,7 @@
                 <div class="grid grid-cols-4 gap-2 text-xl">
                     <button onclick="setAvatar('🐺')" class="p-2 rounded-xl glass-btn">🐺</button>
                     <button onclick="setAvatar('🏹')" class="p-2 rounded-xl glass-btn">🏹</button>
-                    <button onclick="setAvatar('🛡️')" class="p-2 rounded-xl glass-btn">🛡️</button>
+                    <button onclick="setAvatar('📚')" class="p-2 rounded-xl glass-btn">📚</button>
                     <button onclick="setAvatar('👑')" class="p-2 rounded-xl glass-btn">👑</button>
                 </div>
             </div>
@@ -241,65 +248,59 @@
 
     <!-- GAME SCRIPT -->
     <script>
-        // YKS and Turkic History Question Database (With Visuals & Maps)
+        // YKS Multi-Subject Question Database (With Visuals & Maps)
         const questionsDB = {
-            yks_tyt: [
+            tarih: [
                 { 
-                    q: "Orhun Anıtları (Yazıtları) hangi Türk devletine aittir ve hangi alfabeyle yazılmıştır?", 
+                    q: "Orhun Anıtları hangi Türk devletine aittir ve hangi alfabeyle yazılmıştır?", 
                     options: ["Köktürkler - Göktürk Alfabesi", "Uygurlar - Uygur Alfabesi", "Hunlar - Kiril Alfabesi", "Kırgızlar - Arap Alfabesi"], 
                     correct: 0, 
-                    exp: "Vezir Tonyukuk, Kül Tigin ve Bilge Kağan adına dikilen Orhun Yazıtları Göktürk alfabesiyle yazılmıştır.",
+                    exp: "Orhun Yazıtları Vezir Tonyukuk, Kül Tigin ve Bilge Kağan adına Göktürk alfabesiyle dikilmiştir.",
                     visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Orkhon_inscriptions_Kul_Tegin_DSC06163.JPG/640px-Orkhon_inscriptions_Kul_Tegin_DSC06163.JPG",
                     caption: "Orhun Yazıtları - Moğolistan"
                 },
                 { 
-                    q: "YKS / TYT Tarzı: İslamiyet öncesi Türk devletlerinde kurultay adı verilen meclisin temel yetkileri arasında aşağıdakilerden hangisi yer almaz?", 
-                    options: ["Kağanı tahttan indirmek veya değiştirmek", "Savaş ve barış kararları almak", "Örgün hukuk kurallarını (töre) doğrudan değiştirmek", "Ülke yönetiminde kağana danışmanlık yapmak"], 
-                    correct: 2, 
-                    exp: "Töre kuralları değişmez niteliktedir (Kök Töre); kurultay töreyi baştan yazamaz veya değiştiremez.",
-                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Xiongnu_Empire_map.png/640px-Xiongnu_Empire_map.png",
-                    caption: "Orta Asya Türk Devletleri Yerleşkesi"
-                }
-            ],
-            osmanli: [
-                { 
-                    q: "Osmanlı Devleti'nde tımarlı sipahi sisteminin temel amacı aşağıdakilerden hangisidir?", 
-                    options: ["Devlete yük olmaksızın hazır bir askeri güç (cebelü) yetiştirmek ve tarımsal üretimin sürekliliğini sağlamak", "Hazineye doğrudan nakit akışı sağlamak", "Tüm toprakları sarayın doğrudan kontrolünde tutmak", "Yeniçeri ocağına asker temin etmek"], 
-                    correct: 0, 
-                    exp: "Tımar sistemi hem hazineden para harcamadan ordu beslenmesini sağlar hem de toprağın boş kalmasını önler.",
-                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Ottoman_Empire_1300-1359.png/640px-Ottoman_Empire_1300-1359.png",
-                    caption: "Osmanlı Toprak ve Teşkilat Haritası"
-                },
-                { 
-                    q: "İstanbul'u fethederek orta çağın kapanıp yeni çağın açılmasına öncülük eden padişah kimdir?", 
-                    options: ["II. Mehmed (Fatih)", "I. Selim (Yavuz)", "Kanuni Sultan Süleyman", "I. Murad"], 
+                    q: "İstanbul'u fethederek orta çağın kapanmasına öncülük eden Osmanlı padişahı kimdir?", 
+                    options: ["II. Mehmed (Fatih)", "I. Selim", "Kanuni Sultan Süleyman", "I. Murad"], 
                     correct: 0, 
                     exp: "Fatih Sultan Mehmet 1453 yılında İstanbul'u fethetmiştir.",
                     visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/The_Siege_of_Constantinople_1453.jpg/640px-The_Siege_of_Constantinople_1453.jpg",
                     caption: "İstanbul'un Fethi Minyatürü"
                 }
             ],
-            inkilap: [
+            cografya: [
                 { 
-                    q: "YKS / AYT Tarzı: Kurtuluş Savaşı'nda Batı Cephesi'nde Yunan kuvvetlerine karşı kazanılan ve düzenli ordunun ilk zaferi olan muharebe hangisidir?", 
-                    options: ["I. İnönü Zaferi", "Sakarya Meydan Muharebesi", "Büyük Taarruz", "I. Dünya Savaşı Çanakkale Cephesi"], 
+                    q: "Türkiye'nin matematik konumuna bağlı olarak hangisi söylenebilir?", 
+                    options: ["Kuzey yarımkürede yer alır ve ılıman kuşaktadır", "Güney yarımkürededir", "Ekvator üzerindedir", "Tropikal kuşaktadır"], 
                     correct: 0, 
-                    exp: "I. İnönü Muharebesi düzenli ordunun ilk zaferidir ve ardından Londra Konferansı ile Teşkilat-ı Esasiye Kanunu gelmiştir.",
-                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Gallipoli_Campaign_map-tr.svg/640px-Gallipoli_Campaign_map-tr.svg.png",
-                    caption: "Milli Mücadele Dönemi Harita Hattı"
-                },
+                    exp: "Türkiye 36°-42° Kuzey paralelleri arasında yer aldığından Kuzey Yarımküre'de ve ılıman kuşaktadır.",
+                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Turkey_%28orthographic_projection%29.svg/640px-Turkey_%28orthographic_projection%29.svg.png",
+                    caption: "Türkiye'nin Konum Haritası"
+                }
+            ],
+            edebiyat: [
                 { 
-                    q: "TBMM hangi tarihte açılmıştır?", 
-                    options: ["23 Nisan 1920", "19 Mayıs 1919", "29 Ekim 1923", "30 Ağustos 1922"], 
+                    q: "Tanzimat döneminde yazılan ilk edebi roman aşağıdakilerden hangisidir?", 
+                    options: ["İntibah (Namık Kemal)", "Taaşşuk-ı Talat ve Fitnat", "Araba Sevdası", "Mai ve Siyah"], 
                     correct: 0, 
-                    exp: "I. Türkiye Büyük Millet Meclisi Ankara'da 23 Nisan 1920'de açılmıştır.",
-                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/First_Parliament_of_Turkey.jpg/640px-First_Parliament_of_Turkey.jpg",
-                    caption: "I. TBMM Binası"
+                    exp: "Namık Kemal'in yazdığı İntibah Türk edebiyatındaki ilk edebi romandır.",
+                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Namik_Kemal.jpg/640px-Namik_Kemal.jpg",
+                    caption: "Namık Kemal"
+                }
+            ],
+            matematik: [
+                { 
+                    q: "3x - 5 = 10 denklemini sağlayan x değeri kaçtır?", 
+                    options: ["5", "3", "4", "6"], 
+                    correct: 0, 
+                    exp: "3x = 15 ise x = 5 bulunur.",
+                    visual: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Math_class.jpg/640px-Math_class.jpg",
+                    caption: "Temel Matematik ve Denklem"
                 }
             ]
         };
 
-        let currentMode = 'yks_tyt';
+        let currentSubject = 'tarih';
         let activeQuestions = [];
         let currentIndex = 0;
         let score = 0;
@@ -308,34 +309,34 @@
         let answered = false;
 
         const allBadges = [
-            { id: 'alp', name: 'Zaman Tüneli Muhafızı', desc: 'İlk seferini başarıyla tamamla', icon: '⏳', unlocked: false },
-            { id: 'bige', name: 'YKS Tarih Şampiyonu', desc: '200 puan barajını aş', icon: '📜', unlocked: false }
+            { id: 'alp', name: 'Zaman Tüneli Kaşifi', desc: 'İlk testi başarıyla tamamla', icon: '🎯', unlocked: false },
+            { id: 'master', name: 'YKS Derececisi', desc: '200 puan barajını aş', icon: '📜', unlocked: false }
         ];
 
         let userProfile = { name: "Alp", avatar: "🐺", score: 0 };
 
         function showScreen(id) {
-            ['welcomeScreen', 'quizScreen', 'matchingScreen', 'resultScreen'].forEach(s => {
+            ['welcomeScreen', 'quizScreen', 'resultScreen'].forEach(s => {
                 document.getElementById(s).classList.add('hidden');
             });
             document.getElementById(id).classList.remove('hidden');
         }
 
-        function selectGameMode(mode) {
-            currentMode = mode;
-            ['yks_tyt', 'osmanli', 'inkilap'].forEach(m => {
-                document.getElementById(`mode_${m}`).className = "p-3.5 rounded-2xl glass-btn text-left space-y-1";
+        function selectSubject(subj) {
+            currentSubject = subj;
+            ['tarih', 'cografya', 'edebiyat', 'matematik'].forEach(s => {
+                document.getElementById(`subj_${s}`).className = "p-3.5 rounded-2xl glass-btn text-left space-y-1";
             });
-            document.getElementById(`mode_${mode}`).className = "p-3.5 rounded-2xl glass-btn text-left border-amber-500/50 bg-amber-500/20 space-y-1";
+            document.getElementById(`subj_${subj}`).className = "p-3.5 rounded-2xl glass-btn text-left border-amber-500/50 bg-amber-500/20 space-y-1";
         }
 
         function startQuiz() {
-            let pool = questionsDB[currentMode] || questionsDB.yks_tyt;
+            let pool = questionsDB[currentSubject] || questionsDB.tarih;
             activeQuestions = [...pool];
             currentIndex = 0;
             score = 0;
             document.getElementById('totalQNum').innerText = activeQuestions.length;
-            document.getElementById('quizModeBadge').innerText = currentMode.toUpperCase();
+            document.getElementById('quizSubjBadge').innerText = currentSubject.toUpperCase();
             showScreen('quizScreen');
             loadQuestion();
         }
@@ -436,73 +437,10 @@
             playSound('success');
         }
 
-        // Matching Game
-        const matchingData = [
-            { event: "İstanbul'un Fethi", year: "1453" },
-            { event: "Malazgirt Savaşı", year: "1071" },
-            { event: "TBMM'nin Açılışı", year: "1920" },
-            { event: "Talas Savaşı", year: "751" }
-        ];
-        let selectedEvent = null;
-        let matchedCount = 0;
-        let selectedEventBtn = null;
-
-        function startMatchingGame() {
-            matchedCount = 0;
-            selectedEvent = null;
-            document.getElementById('matchingScoreText').innerText = `Eşleşen: 0 / ${matchingData.length}`;
-            showScreen('matchingScreen');
-
-            let evs = [...matchingData].sort(() => Math.random() - 0.5);
-            let yrs = [...matchingData].sort(() => Math.random() - 0.5);
-
-            let evCont = document.getElementById('matchingEventsContainer');
-            let yrCont = document.getElementById('matchingYearsContainer');
-            evCont.innerHTML = ''; yrCont.innerHTML = '';
-
-            evs.forEach(item => {
-                let btn = document.createElement('button');
-                btn.className = "w-full p-2.5 rounded-xl glass-btn text-xs font-semibold text-left text-gray-200";
-                btn.innerText = item.event;
-                btn.onclick = () => {
-                    document.querySelectorAll('#matchingEventsContainer button').forEach(b => b.classList.remove('border-amber-400', 'bg-amber-500/20'));
-                    btn.classList.add('border-amber-400', 'bg-amber-500/20');
-                    selectedEvent = item.event;
-                    selectedEventBtn = btn;
-                };
-                evCont.appendChild(btn);
-            });
-
-            yrs.forEach(item => {
-                let btn = document.createElement('button');
-                btn.className = "w-full p-2.5 rounded-xl glass-btn text-xs font-semibold text-center text-gray-200";
-                btn.innerText = item.year;
-                btn.onclick = () => {
-                    if(!selectedEvent) return;
-                    let correct = matchingData.find(x => x.event === selectedEvent);
-                    if(correct && correct.year === item.year) {
-                        playSound('correct');
-                        selectedEventBtn.disabled = true;
-                        btn.disabled = true;
-                        selectedEventBtn.classList.add('opacity-40', 'bg-emerald-500/20');
-                        btn.classList.add('opacity-40', 'bg-emerald-500/20');
-                        matchedCount++;
-                        document.getElementById('matchingScoreText').innerText = `Eşleşen: ${matchedCount} / ${matchingData.length}`;
-                        selectedEvent = null;
-                    } else {
-                        playSound('wrong');
-                        btn.classList.add('bg-red-500/30');
-                        setTimeout(() => btn.classList.remove('bg-red-500/30'), 400);
-                    }
-                };
-                yrCont.appendChild(btn);
-            });
-        }
-
-        // Badges & Profile
+        // Badges & Modals
         function checkBadges() {
             if(!allBadges[0].unlocked) { allBadges[0].unlocked = true; triggerBadge(); }
-            if(score >= 200 && !allBadges[1].unlocked) { allBadges[1].unlocked = true; triggerBadge(); }
+            if(score >= 150 && !allBadges[1].unlocked) { allBadges[1].unlocked = true; triggerBadge(); }
             updateBadgeUI();
         }
         function triggerBadge() { document.getElementById('newBadgeAlert').classList.remove('hidden'); }
@@ -522,6 +460,10 @@
             document.getElementById('awardsModal').classList.remove('hidden');
         }
         function closeAwardsModal() { document.getElementById('awardsModal').classList.add('hidden'); }
+        
+        function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
+
         function openAvatarModal() { document.getElementById('avatarModal').classList.remove('hidden'); }
         function closeAvatarModal() { document.getElementById('avatarModal').classList.add('hidden'); }
         function setAvatar(av) { userProfile.avatar = av; document.getElementById('headerAvatar').innerText = av; }
@@ -534,8 +476,11 @@
 
         // Audio Synth
         function playSound(type) {
+            if(!document.getElementById('soundToggle').checked) return;
             try {
+                let volVal = parseInt(document.getElementById('volSlider').value) / 100;
                 const synth = new Tone.Synth().toDestination();
+                Tone.Destination.volume.value = Tone.gainToDb(volVal);
                 if(type === 'correct') synth.triggerAttackRelease("G5", "8n");
                 else if(type === 'wrong') synth.triggerAttackRelease("C3", "8n");
                 else if(type === 'success') synth.triggerAttackRelease("C5", "4n");
