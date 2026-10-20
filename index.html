@@ -97,31 +97,47 @@
                 <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <div>
-                <h2 class="text-2xl md:text-3xl font-black text-white mb-1">YKS Hazırlık Portalı</h2>
-                <p class="text-xs md:text-sm text-gray-400">Dersini seç, test çözerek kendini sına veya haftalık ders programını oluştur!</p>
+                <h2 class="text-2xl md:text-3xl font-black text-white mb-1">YKS & Genel Kültür Portalı</h2>
+                <p class="text-xs md:text-sm text-gray-400">Dersini ve soru sayısını seç, test çözerek kendini sına veya haftalık ders programını oluştur!</p>
             </div>
 
             <!-- Subject Grid -->
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="selectSubject('tarih')" id="subj_tarih" class="p-4 rounded-2xl glass-btn text-left border-indigo-500/50 bg-indigo-500/20 space-y-1">
+                <button onclick="selectSubject('tarih')" id="subj_tarih" class="p-3 rounded-2xl glass-btn text-left border-indigo-500/50 bg-indigo-500/20 space-y-1">
                     <div class="text-indigo-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-landmark"></i> Tarih</div>
                     <p class="text-[10px] text-gray-400">Türk & Dünya Tarihi, İnkılap</p>
                 </button>
-                <button onclick="selectSubject('cografya')" id="subj_cografya" class="p-4 rounded-2xl glass-btn text-left space-y-1">
+                <button onclick="selectSubject('genel_kult_tarih')" id="subj_genel_kult_tarih" class="p-3 rounded-2xl glass-btn text-left space-y-1">
+                    <div class="text-amber-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-globe"></i> Genel Kültür Tarih</div>
+                    <p class="text-[10px] text-gray-400">Dünya mirası, medeniyetler ve genel kültür</p>
+                </button>
+                <button onclick="selectSubject('cografya')" id="subj_cografya" class="p-3 rounded-2xl glass-btn text-left space-y-1">
                     <div class="text-cyan-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-earth-americas"></i> Coğrafya</div>
                     <p class="text-[10px] text-gray-400">İklimler, Yerşekilleri ve Bölgeler</p>
                 </button>
-                <button onclick="selectSubject('edebiyat')" id="subj_edebiyat" class="p-4 rounded-2xl glass-btn text-left space-y-1">
+                <button onclick="selectSubject('edebiyat')" id="subj_edebiyat" class="p-3 rounded-2xl glass-btn text-left space-y-1">
                     <div class="text-purple-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-book-open"></i> Edebiyat</div>
                     <p class="text-[10px] text-gray-400">Yazarlar, Eserler ve Akımlar</p>
                 </button>
-                <button onclick="selectSubject('matematik')" id="subj_matematik" class="p-4 rounded-2xl glass-btn text-left space-y-1">
+                <button onclick="selectSubject('matematik')" id="subj_matematik" class="col-span-2 p-3 rounded-2xl glass-btn text-left space-y-1">
                     <div class="text-emerald-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-calculator"></i> Matematik</div>
                     <p class="text-[10px] text-gray-400">Temel Kavramlar ve Problemler</p>
                 </button>
             </div>
 
-            <div class="flex gap-2">
+            <!-- Question Count Options -->
+            <div class="space-y-2 text-left pt-2 border-t border-white/10">
+                <label class="block text-xs font-bold text-gray-300 uppercase">Soru Sayısı Seçimi</label>
+                <div class="grid grid-cols-5 gap-2">
+                    <button onclick="setQuestionCount(50)" id="qCount50" class="q-btn py-2 rounded-xl text-xs font-bold glass-btn text-cyan-300 bg-cyan-500/20 border-cyan-500/50">50</button>
+                    <button onclick="setQuestionCount(100)" id="qCount100" class="q-btn py-2 rounded-xl text-xs font-bold glass-btn text-gray-300">100</button>
+                    <button onclick="setQuestionCount(500)" id="qCount500" class="q-btn py-2 rounded-xl text-xs font-bold glass-btn text-gray-300">500</button>
+                    <button onclick="setQuestionCount(2000)" id="qCount2000" class="q-btn py-2 rounded-xl text-xs font-bold glass-btn text-gray-300">2000</button>
+                    <button onclick="setQuestionCount(20000)" id="qCount20000" class="q-btn py-2 rounded-xl text-xs font-bold glass-btn text-gray-300">20K</button>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
                 <button onclick="startQuiz()" class="flex-1 py-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 font-extrabold text-white text-sm shadow-lg shadow-indigo-500/20 uppercase tracking-wider transition transform active:scale-95">
                     Testi Başlat
                 </button>
@@ -136,7 +152,7 @@
             <div class="flex justify-between items-center pb-3 border-b border-white/10">
                 <div class="flex items-center space-x-2">
                     <span id="quizSubjBadge" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">TARİH</span>
-                    <span class="text-xs text-gray-400">Soru: <strong id="currentQNum" class="text-white">1</strong> / <span id="totalQNum">4</span></span>
+                    <span class="text-xs text-gray-400">Soru: <strong id="currentQNum" class="text-white">1</strong> / <span id="totalQNum">50</span></span>
                 </div>
                 <div id="timerDisplay" class="font-mono text-base font-bold text-cyan-400">20s</div>
                 <div class="text-xs text-gray-400">Puan: <strong id="scoreDisplay" class="text-emerald-400 text-sm">0</strong></div>
@@ -285,7 +301,7 @@
 
     <!-- GAME SCRIPT -->
     <script>
-        const questionsDB = {
+        const baseQuestionsDB = {
             tarih: [
                 { 
                     q: "Orhun Anıtları hangi Türk devletine aittir ve hangi alfabeyle yazılmıştır?", 
@@ -298,6 +314,20 @@
                     options: ["II. Mehmed (Fatih)", "I. Selim", "Kanuni Sultan Süleyman", "I. Murad"], 
                     correct: 0, 
                     exp: "Fatih Sultan Mehmet 1453 yılında İstanbul'u fethetmiştir."
+                }
+            ],
+            genel_kult_tarih: [
+                {
+                    q: "Dünyanın yedi harikasından biri olan İskenderiye Feneri hangi antik kent ve ülkededir?",
+                    options: ["Mısır / İskenderiye", "Yunanistan / Atina", "İtalya / Roma", "Türkiye / İzmir"],
+                    correct: 0,
+                    exp: "İskenderiye Feneri, Mısır'ın İskenderiye kıyısındaki Pharos adasında inşa edilmiştir."
+                },
+                {
+                    q: "Tarihte ilk defa para basımını gerçekleştiren uygarlık aşağıdakilerden hangisidir?",
+                    options: ["Lidyalılar", "Sümerler", "Frigler", "Urartular"],
+                    correct: 0,
+                    exp: "Lidyalılar takas usulüne son vererek tarihte ilk kez parayı icat etmiş ve kullanmıştır."
                 }
             ],
             cografya: [
@@ -326,7 +356,27 @@
             ]
         };
 
+        // Dinamik soru sayısı için soru havuzunu genişleten yardımcı fonksiyon
+        function generateQuestions(subject, count) {
+            let base = baseQuestionsDB[subject] || baseQuestionsDB.tarih;
+            let result = [];
+            let index = 0;
+            while(result.length < count) {
+                let sample = base[index % base.length];
+                // Büyük sayılarda soru metinlerini ayırt edilebilir kılmak için kopyalayıp ekliyoruz
+                result.push({
+                    q: `${sample.q} (${result.length + 1}. Soru Sürümü)`,
+                    options: [...sample.options],
+                    correct: sample.correct,
+                    exp: sample.exp
+                });
+                index++;
+            }
+            return result;
+        }
+
         let currentSubject = 'tarih';
+        let selectedQuestionCount = 50;
         let activeQuestions = [];
         let currentIndex = 0;
         let score = 0;
@@ -336,7 +386,7 @@
 
         const allBadges = [
             { id: 'pioneer', name: 'Zaman Tüneli Kaşifi', desc: 'İlk testi başarıyla tamamla', icon: '🎯', unlocked: false },
-            { id: 'master', name: 'YKS Derececisi', desc: '150 puan barajını aş', icon: '📜', unlocked: false }
+            { id: 'master', name: 'YKS Derececisi', desc: '500 puan barajını aş', icon: '📜', unlocked: false }
         ];
 
         let userProfile = { name: "Öğrenci", avatar: "🚀", score: 0 };
@@ -350,15 +400,30 @@
 
         function selectSubject(subj) {
             currentSubject = subj;
-            ['tarih', 'cografya', 'edebiyat', 'matematik'].forEach(s => {
-                document.getElementById(`subj_${s}`).className = "p-4 rounded-2xl glass-btn text-left space-y-1";
+            ['tarih', 'genel_kult_tarih', 'cografya', 'edebiyat', 'matematik'].forEach(s => {
+                let el = document.getElementById(`subj_${s}`);
+                if(el) el.className = "p-3 rounded-2xl glass-btn text-left space-y-1";
             });
-            document.getElementById(`subj_${subj}`).className = "p-4 rounded-2xl glass-btn text-left border-indigo-500/50 bg-indigo-500/20 space-y-1";
+            let activeEl = document.getElementById(`subj_${subj}`);
+            if(activeEl) activeEl.className = "p-3 rounded-2xl glass-btn text-left border-indigo-500/50 bg-indigo-500/20 space-y-1";
+        }
+
+        function setQuestionCount(count) {
+            selectedQuestionCount = count;
+            [50, 100, 500, 2000, 20000].forEach(c => {
+                let btn = document.getElementById(`qCount${c}`);
+                if(btn) {
+                    btn.className = "q-btn py-2 rounded-xl text-xs font-bold glass-btn text-gray-300";
+                }
+            });
+            let activeBtn = document.getElementById(`qCount${count}`);
+            if(activeBtn) {
+                activeBtn.className = "q-btn py-2 rounded-xl text-xs font-bold glass-btn text-cyan-300 bg-cyan-500/20 border-cyan-500/50";
+            }
         }
 
         function startQuiz() {
-            let pool = questionsDB[currentSubject] || questionsDB.tarih;
-            activeQuestions = [...pool];
+            activeQuestions = generateQuestions(currentSubject, selectedQuestionCount);
             currentIndex = 0;
             score = 0;
             document.getElementById('totalQNum').innerText = activeQuestions.length;
@@ -506,7 +571,7 @@
         // Badges & Modals
         function checkBadges() {
             if(!allBadges[0].unlocked) { allBadges[0].unlocked = true; triggerBadge(); }
-            if(score >= 150 && !allBadges[1].unlocked) { allBadges[1].unlocked = true; triggerBadge(); }
+            if(score >= 500 && !allBadges[1].unlocked) { allBadges[1].unlocked = true; triggerBadge(); }
             updateBadgeUI();
         }
         function triggerBadge() { document.getElementById('newBadgeAlert').classList.remove('hidden'); }
@@ -545,9 +610,11 @@
 
         // Audio Synth
         function playSound(type) {
-            if(!document.getElementById('soundToggle').checked) return;
+            let soundToggle = document.getElementById('soundToggle');
+            if(soundToggle && !soundToggle.checked) return;
             try {
-                let volVal = parseInt(document.getElementById('volSlider').value) / 100;
+                let volSlider = document.getElementById('volSlider');
+                let volVal = volSlider ? parseInt(volSlider.value) / 100 : 0.8;
                 const synth = new Tone.Synth().toDestination();
                 Tone.Destination.volume.value = Tone.gainToDb(volVal);
                 if(type === 'correct') synth.triggerAttackRelease("G5", "8n");
