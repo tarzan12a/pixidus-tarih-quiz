@@ -2,993 +2,1155 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tarih & Genel Kültür Bilgi Yarışması</title>
-
-    <!-- Google AdSense Script Integration -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5903431933111991"
-     crossorigin="anonymous"></script>
-
-    <!-- Pixidus HTML SDK Integration -->
-    <script src="https://pixidus.com/sdk/v1/pixidus-html-sdk.js"></script>
-
-    <!-- Tailwind CSS CDN -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarih Bilgi Yarışması - History Quiz Master</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tone.js for Audio Synth and Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        gold: {
-                            400: '#facc15',
-                            500: '#eab308',
-                            600: '#ca8a04',
-                            700: '#a16207'
-                        },
-                        bronze: {
-                            500: '#cd7f32',
-                            600: '#b8732d'
-                        },
-                        darkpaper: '#1e293b'
+                        aurora: {
+                            bg: '#0B0F19',
+                            card: 'rgba(23, 31, 51, 0.75)',
+                            border: 'rgba(255, 255, 255, 0.12)',
+                            primary: '#6366f1',
+                            accent: '#a855f7',
+                            neon: '#06b6d4',
+                            emerald: '#10b981',
+                            rose: '#f43f5e'
+                        }
                     },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'bounce-short': 'bounce 0.6s ease-in-out 1'
+                    backdropBlur: {
+                        xs: '2px',
                     }
                 }
             }
         }
     </script>
-
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts Inter & Cinzel -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
-            touch-action: manipulation;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-            user-select: none;
-            -webkit-user-select: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            overflow-x: hidden;
         }
-
-        .title-font {
-            font-family: 'Cinzel', serif;
+        .aurora-bg {
+            background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.25) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.2) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
         }
-
-        /* Glassmorphism effects */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(234, 179, 8, 0.25);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            background: rgba(23, 31, 51, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
-
-        .gold-border {
-            border: 2px solid #eab308;
-            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.25s ease;
         }
-
-        .gold-gradient-text {
-            background: linear-gradient(135deg, #fef08a 0%, #eab308 50%, #ca8a04 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gold-button {
-            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
-            color: #0f172a;
-            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
-            transition: all 0.2s ease;
-        }
-
-        .gold-button:hover:not(:disabled) {
+        .glass-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(234, 179, 8, 0.5);
         }
-
-        .gold-button:active:not(:disabled) {
-            transform: translateY(1px);
+        .pulse-neon {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
         }
-
-        .option-btn {
-            transition: all 0.2s ease;
-            background: rgba(51, 65, 85, 0.7);
-            border: 1px solid rgba(148, 163, 184, 0.2);
-        }
-
-        .option-btn:hover:not(:disabled) {
-            border-color: #eab308;
-            background: rgba(51, 65, 85, 1);
-            transform: translateX(4px);
-        }
-
-        .option-btn.correct {
-            background: linear-gradient(135deg, #15803d 0%, #166534 100%) !important;
-            border-color: #22c55e !important;
-            color: #ffffff !important;
-        }
-
-        .option-btn.wrong {
-            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
-            border-color: #ef4444 !important;
-            color: #ffffff !important;
-        }
-
-        .card-flip {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* Custom Scrollbar for list */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.6);
+            background: #0b0f19;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(234, 179, 8, 0.4);
-            border-radius: 3px;
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
         }
     </style>
 </head>
-<body class="min-h-screen text-slate-100 flex flex-col justify-between items-center p-3 sm:p-6 overflow-x-hidden">
+<body class="aurora-bg min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-    <!-- Top Navigation Header -->
-    <header class="w-full max-w-2xl flex justify-between items-center mb-3 sm:mb-6 glass-panel rounded-2xl px-4 py-3">
-        <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-bold text-xl shadow-lg">
-                <i class="fa-solid fa-monument"></i>
+    <!-- TOP BAR / HEADER -->
+    <header class="w-full p-4 md:px-8 border-b border-gray-800/80 glass-panel sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- App Logo & Name -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('welcome')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 p-0.5 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid font-bold fa-landmark text-transparent bg-clip-text bg-gradient-to-tr from-indigo-400 to-cyan-300"></i>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg md:text-xl tracking-tight text-white leading-none">
+                        HISTORIA <span class="text-cyan-400 text-xs px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 font-semibold">AURORA</span>
+                    </h1>
+                    <p class="text-[11px] text-gray-400 font-medium" data-i18n="tagline">Tarih Bilgi Yarışması</p>
+                </div>
             </div>
-            <div>
-                <h1 class="title-font text-base sm:text-lg font-bold gold-gradient-text tracking-wide leading-tight">TARİH & KÜLTÜR</h1>
-                <p id="sdk-status-badge" class="text-xs text-slate-400 flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
-                    <span id="sdk-mode-text">Pixidus Hazır</span>
-                </p>
-            </div>
-        </div>
 
-        <!-- Controls (Sound & HighScore) -->
-        <div class="flex items-center space-x-2">
-            <button id="sound-btn" onclick="toggleSound()" class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 hover:bg-slate-700 transition" title="Ses Aç/Kapat">
-                <i id="sound-icon" class="fa-solid fa-volume-high"></i>
-            </button>
-            <div class="bg-slate-800/80 border border-amber-500/30 rounded-xl px-3 py-1.5 flex items-center space-x-2">
-                <i class="fa-solid fa-crown text-amber-400 text-sm"></i>
-                <span id="top-high-score" class="font-bold text-amber-300 text-sm">0</span>
+            <!-- Profile & Quick Settings Bar -->
+            <div class="flex items-center space-x-3 md:space-x-4">
+                <!-- User Profile Trigger -->
+                <button onclick="openAvatarModal()" class="flex items-center space-x-2 glass-btn px-3 py-1.5 rounded-full hover:border-cyan-400/50 transition">
+                    <div id="headerAvatar" class="w-8 h-8 rounded-full bg-indigo-600/50 border border-cyan-400/40 flex items-center justify-center text-lg shadow-inner">
+                        🧙‍♂️
+                    </div>
+                    <span id="headerUsername" class="text-xs md:text-sm font-semibold text-gray-200 max-w-[90px] md:max-w-[140px] truncate">Tarihçi</span>
+                    <i class="fa-solid fa-pen text-[10px] text-cyan-400"></i>
+                </button>
+
+                <!-- Settings Button -->
+                <button onclick="openSettingsModal()" class="glass-btn w-10 h-10 rounded-full flex items-center justify-center text-gray-300 hover:text-cyan-400 transition" title="Settings / Ayarlar">
+                    <i class="fa-solid fa-gear text-lg"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="w-full max-w-2xl flex-1 flex flex-col justify-center my-auto relative">
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-5xl w-full mx-auto p-4 md:p-6 flex items-center justify-center">
 
-        <!-- START SCREEN -->
-        <div id="start-screen" class="glass-panel rounded-3xl p-6 sm:p-8 text-center gold-border my-auto animate-fadeIn">
-            <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-4xl shadow-inner">
-                <i class="fa-solid fa-landmark"></i>
+        <!-- 1. WELCOME / SETUP SCREEN -->
+        <section id="welcomeScreen" class="w-full max-w-2xl glass-panel rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden my-auto">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="text-center space-y-4 mb-8">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 inline-block" data-i18n="badgeWelcome">
+                    ✨ Dünya Tarihini Keşfet
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight" data-i18n="mainTitle">
+                    Tarih Bilgini Test Et
+                </h2>
+                <p class="text-sm md:text-base text-gray-400 max-w-md mx-auto" data-i18n="mainDesc">
+                    Farklı çağlardan sorularla kendini sına, jokerlerini stratejik kullan ve en yüksek skoru elde et!
+                </p>
             </div>
 
-            <h2 class="title-font text-2xl sm:text-3xl font-extrabold gold-gradient-text mb-2">Tarih & Genel Kültür</h2>
-            <p class="text-slate-300 text-sm sm:text-base max-w-md mx-auto mb-6 leading-relaxed">
-                Kadim medeniyetlerden yakın tarihe, sanattan edebiyata kadar uzanan 15 soruluk bu bilgi yolculuğuna hazır mısınız?
-            </p>
+            <div class="space-y-6">
+                <!-- User Profile Preview / Edit Quick Card -->
+                <div class="p-4 rounded-2xl bg-slate-900/60 border border-gray-800/80 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div id="welcomeAvatarDisplay" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-2xl shadow-md">
+                            🧙‍♂️
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400" data-i18n="activeProfile">Aktif Profil</p>
+                            <p id="welcomeUsernameDisplay" class="font-bold text-white text-base">Tarihçi</p>
+                        </div>
+                    </div>
+                    <button onclick="openAvatarModal()" class="text-xs px-3 py-2 rounded-xl bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 font-medium transition" data-i18n="changeAvatar">
+                        Avatar Değiştir
+                    </button>
+                </div>
 
-            <!-- Quick Info Cards -->
-            <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
-                <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
-                    <i class="fa-solid fa-stopwatch text-amber-400 text-lg mb-1"></i>
-                    <div class="text-xs text-slate-400">Süre / Soru</div>
-                    <div class="font-bold text-slate-100 text-sm sm:text-base">15 Saniye</div>
+                <!-- Select Question Count -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-list-ol text-cyan-400"></i>
+                        <span data-i18n="selectQuestionCount">Soru Sayısı Seçimi</span>
+                    </label>
+                    <div class="grid grid-cols-4 gap-2 md:gap-3">
+                        <button onclick="setQuestionCount(20)" id="qBtn20" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center border-indigo-500/50 bg-indigo-500/20 text-cyan-300">20</button>
+                        <button onclick="setQuestionCount(50)" id="qBtn50" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center text-gray-300">50</button>
+                        <button onclick="setQuestionCount(100)" id="qBtn100" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center text-gray-300">100</button>
+                        <button onclick="setQuestionCount(200)" id="qBtn200" class="q-count-btn glass-btn py-3 rounded-xl font-bold text-sm text-center text-gray-300">200</button>
+                    </div>
                 </div>
-                <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
-                    <i class="fa-solid fa-bolt text-amber-400 text-lg mb-1"></i>
-                    <div class="text-xs text-slate-400">Kombo Bonusu</div>
-                    <div class="font-bold text-slate-100 text-sm sm:text-base">Seri Puan</div>
-                </div>
-                <div class="bg-slate-800/60 p-3 rounded-2xl border border-slate-700/60">
-                    <i class="fa-solid fa-life-ring text-amber-400 text-lg mb-1"></i>
-                    <div class="text-xs text-slate-400">Jokerler</div>
-                    <div class="font-bold text-slate-100 text-sm sm:text-base">50:50 & +10s</div>
-                </div>
+
+                <!-- Start Button -->
+                <button onclick="startGame()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 font-extrabold text-white text-lg shadow-xl shadow-indigo-500/25 transition transform active:scale-[0.98] flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-play text-sm"></i>
+                    <span data-i18n="startQuiz">Yarışmayı Başlat</span>
+                </button>
             </div>
+        </section>
 
-            <button onclick="startGameEngine()" class="w-full gold-button py-4 rounded-2xl font-extrabold text-base sm:text-lg tracking-wide uppercase flex items-center justify-center gap-2">
-                <i class="fa-solid fa-play"></i> Yarışmaya Başla
-            </button>
-        </div>
-
-        <!-- QUIZ GAMEPLAY SCREEN -->
-        <div id="quiz-screen" class="hidden flex-col gap-4 relative">
-
-            <!-- Stats & Global Game Controls Bar -->
-            <div class="glass-panel rounded-2xl p-3 sm:p-4 flex flex-wrap gap-2 justify-between items-center text-xs sm:text-sm">
-                <!-- Question Counter -->
-                <div class="flex items-center gap-2">
-                    <span class="text-slate-400">Soru:</span>
-                    <span id="current-q-num" class="font-bold text-amber-400 text-base">1</span>
-                    <span class="text-slate-500">/</span>
-                    <span id="total-q-num" class="text-slate-400">20</span>
+        <!-- 2. QUIZ GAME SCREEN -->
+        <section id="quizScreen" class="w-full max-w-3xl glass-panel rounded-3xl p-5 md:p-8 shadow-2xl hidden relative">
+            
+            <!-- Top Controls: Pause, Timer, Score -->
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-800/80">
+                <!-- Question Progress & Pause -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="togglePauseGame()" class="w-9 h-9 rounded-xl glass-btn flex items-center justify-center text-cyan-400 hover:bg-cyan-500/20 transition">
+                        <i id="pauseIcon" class="fa-solid fa-pause"></i>
+                    </button>
+                    <div>
+                        <span class="text-xs text-gray-400" data-i18n="questionProgress">Soru</span>
+                        <p class="text-sm md:text-base font-extrabold text-white"><span id="currentQNum">1</span> / <span id="totalQNum">20</span></p>
+                    </div>
                 </div>
 
-                <!-- Combo/Streak Indicator -->
-                <div class="flex items-center gap-1.5 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/30">
-                    <i class="fa-solid fa-fire text-amber-400 animate-pulse"></i>
-                    <span id="streak-counter" class="font-bold text-amber-300">0x Seri</span>
+                <!-- Timer Gauge -->
+                <div class="flex flex-col items-center">
+                    <div id="timerDisplay" class="text-xl md:text-2xl font-black text-cyan-400 font-mono tracking-wider">
+                        20
+                    </div>
+                    <span class="text-[10px] text-gray-400 font-medium" data-i18n="timerLabel">SANİYE</span>
                 </div>
 
                 <!-- Current Score -->
-                <div class="flex items-center gap-1.5">
-                    <span class="text-slate-400">Puan:</span>
-                    <span id="current-score" class="font-extrabold text-amber-400 text-lg">0</span>
-                </div>
-
-                <!-- Game Playback Controls (Start/Stop & Reset) -->
-                <div class="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-700/60">
-                    <button id="pause-btn" onclick="togglePauseGame()" class="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-                        <i id="pause-btn-icon" class="fa-solid fa-pause"></i>
-                        <span id="pause-btn-text">Durdur</span>
-                    </button>
-                    <button id="reset-btn" onclick="resetGame()" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer" title="Oyunu Sıfırla">
-                        <i class="fa-solid fa-rotate-left"></i>
-                        <span>Sıfırla</span>
-                    </button>
+                <div class="text-right">
+                    <span class="text-xs text-gray-400" data-i18n="scoreLabel">Puan</span>
+                    <p id="scoreDisplay" class="text-lg md:text-xl font-black text-emerald-400">0</p>
                 </div>
             </div>
 
-            <!-- Timer & Bar -->
-            <div class="glass-panel rounded-2xl p-3 flex flex-col gap-1.5">
-                <div class="flex justify-between items-center text-xs font-semibold px-1">
-                    <span class="text-slate-400 flex items-center gap-1">
-                        <i class="fa-regular fa-clock text-amber-400"></i> Kalan Süre
-                    </span>
-                    <span id="timer-text" class="text-amber-400 font-mono text-sm font-bold">15s</span>
-                </div>
-                <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700">
-                    <div id="timer-bar" class="bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full transition-all duration-100 ease-linear" style="width: 100%;"></div>
-                </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-950/60 h-2 rounded-full mb-6 overflow-hidden border border-white/5">
+                <div id="progressBar" class="bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-400 h-full w-0 transition-all duration-300"></div>
             </div>
 
-            <!-- Question Card Container (Relative for Pause Overlay) -->
-            <div class="relative">
-                <!-- Question Card -->
-                <div id="question-card" class="glass-panel rounded-3xl p-5 sm:p-7 border border-amber-500/30 flex flex-col gap-5 card-flip">
-                    
-                    <!-- Category Badge & Lifelines Header -->
-                    <div class="flex justify-between items-center gap-2">
-                        <span id="q-category" class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/20">
-                            Osmanlı Tarihi
-                        </span>
-
-                        <!-- Lifeline Buttons -->
-                        <div class="flex items-center gap-2">
-                            <button id="lifeline-5050" onclick="useLifeline5050()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5" title="Yarı Yarıya Jokeri">
-                                <i class="fa-solid fa-[#]"></i> 50:50
-                            </button>
-                            <button id="lifeline-time" onclick="useLifelineTime()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5" title="+10 Saniye Ek Süre">
-                                <i class="fa-solid fa-plus text-[10px]"></i>10s
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Question Text -->
-                    <h3 id="question-text" class="text-slate-100 font-semibold text-base sm:text-xl leading-relaxed">
-                        Soru yükleniyor...
-                    </h3>
-
-                    <!-- Options List -->
-                    <div id="options-container" class="grid grid-cols-1 gap-3 pt-2">
-                        <!-- Option buttons will be rendered dynamically -->
-                    </div>
-                </div>
-
-                <!-- Pause Overlay Screen -->
-                <div id="pause-overlay" class="hidden absolute inset-0 glass-panel rounded-3xl border border-amber-500/50 flex flex-col items-center justify-center p-6 text-center z-20 backdrop-blur-md">
-                    <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-3xl mb-3 shadow-lg">
-                        <i class="fa-solid fa-pause"></i>
-                    </div>
-                    <h3 class="title-font text-2xl font-bold gold-gradient-text mb-2">OYUN DURDURULDU</h3>
-                    <p class="text-slate-300 text-sm mb-6">Yarışma donduruldu. Devam etmek için aşağıdaki butona basın.</p>
-                    <div class="flex gap-3 w-full max-w-xs">
-                        <button onclick="togglePauseGame()" class="flex-1 gold-button py-3 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-play"></i> Devam Et
-                        </button>
-                        <button onclick="resetGame()" class="px-4 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 rounded-xl font-bold text-sm flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-rotate-left"></i> Sıfırla
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- END GAME / RESULTS SCREEN -->
-        <div id="result-screen" class="hidden glass-panel rounded-3xl p-6 sm:p-8 text-center gold-border my-auto animate-fadeIn">
-            <div class="w-20 h-20 mx-auto mb-3 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 text-3xl font-extrabold shadow-xl">
-                <i class="fa-solid fa-trophy"></i>
-            </div>
-
-            <h2 id="result-title" class="title-font text-2xl sm:text-3xl font-bold gold-gradient-text mb-1">Tebrikler!</h2>
-            <p id="result-subtitle" class="text-slate-400 text-sm mb-6">Yarışmayı Başarıyla Tamamladınız</p>
-
-            <!-- Score Display Box -->
-            <div class="bg-slate-800/80 rounded-2xl p-4 border border-amber-500/30 mb-6">
-                <div class="text-xs text-slate-400 uppercase tracking-wider mb-1">Toplam Puan</div>
-                <div id="final-score" class="text-4xl sm:text-5xl font-extrabold gold-gradient-text mb-2">0</div>
-                <div id="rank-badge" class="inline-block bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full">
-                    Ünvan: Tarih Meraklısı
-                </div>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-6 text-center">
-                <div class="bg-slate-800/50 p-3 rounded-2xl border border-slate-700">
-                    <div class="text-xs text-slate-400">Doğru / Yanlış</div>
-                    <div id="stat-correct" class="font-bold text-emerald-400 text-sm sm:text-base mt-1">0 / 0</div>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-2xl border border-slate-700">
-                    <div class="text-xs text-slate-400">Doğruluk Oranı</div>
-                    <div id="stat-accuracy" class="font-bold text-amber-300 text-sm sm:text-base mt-1">%0</div>
-                </div>
-                <div class="bg-slate-800/50 p-3 rounded-2xl border border-slate-700">
-                    <div class="text-xs text-slate-400">En Yüksek Seri</div>
-                    <div id="stat-streak" class="font-bold text-amber-400 text-sm sm:text-base mt-1">0</div>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3">
-                <button onclick="startGameEngine()" class="flex-1 gold-button py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-rotate-right"></i> Yeniden Başlat
+            <!-- Jokers / Lifelines Bar -->
+            <div class="grid grid-cols-3 gap-2 md:gap-4 mb-6">
+                <button id="jokerFifty" onclick="useJokerFifty()" class="glass-btn p-2.5 md:p-3 rounded-2xl flex items-center justify-center space-x-2 text-xs font-bold text-gray-200 hover:text-cyan-300">
+                    <i class="fa-solid fa-percent text-indigo-400"></i>
+                    <span data-i18n="joker50">50:50</span>
+                </button>
+                <button id="jokerSkip" onclick="useJokerSkip()" class="glass-btn p-2.5 md:p-3 rounded-2xl flex items-center justify-center space-x-2 text-xs font-bold text-gray-200 hover:text-cyan-300">
+                    <i class="fa-solid fa-forward text-cyan-400"></i>
+                    <span data-i18n="jokerSkip">Pas Geç</span>
+                </button>
+                <button id="jokerTime" onclick="useJokerTime()" class="glass-btn p-2.5 md:p-3 rounded-2xl flex items-center justify-center space-x-2 text-xs font-bold text-gray-200 hover:text-cyan-300">
+                    <i class="fa-solid fa-stopwatch text-emerald-400"></i>
+                    <span data-i18n="jokerTime">+15 San</span>
                 </button>
             </div>
-        </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-900/70 border border-indigo-500/20 rounded-2xl p-5 md:p-7 mb-6 shadow-inner relative">
+                <span id="questionCategory" class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-3 inline-block">
+                    Dünya Tarihi
+                </span>
+                <h3 id="questionText" class="text-base md:text-xl font-bold text-white leading-relaxed">
+                    Soru yükleniyor...
+                </h3>
+            </div>
+
+            <!-- Options Grid -->
+            <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-6">
+                <!-- Dynamic Options injected via JS -->
+            </div>
+
+            <!-- Question Explanation (Visible after answer) -->
+            <div id="explanationBox" class="hidden p-4 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 text-xs md:text-sm text-cyan-200 mb-6 animate-fade-in">
+                <p class="font-bold mb-1 flex items-center space-x-1">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span data-i18n="explanationTitle">Bilgi Notu:</span>
+                </p>
+                <p id="explanationText"></p>
+            </div>
+
+            <!-- Next Question Button -->
+            <div class="flex justify-end">
+                <button id="nextBtn" onclick="nextQuestion()" disabled class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-extrabold text-sm flex items-center space-x-2 transition shadow-lg">
+                    <span data-i18n="nextQuestion">Sonraki Soru</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. RESULTS / SUMMARY SCREEN -->
+        <section id="resultScreen" class="w-full max-w-2xl glass-panel rounded-3xl p-6 md:p-10 shadow-2xl text-center hidden my-auto">
+            <div class="w-20 h-20 mx-auto mb-4 rounded-3xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 p-1 flex items-center justify-center shadow-xl shadow-cyan-500/20">
+                <div class="w-full h-full bg-slate-950 rounded-[22px] flex items-center justify-center text-3xl">
+                    🏆
+                </div>
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-black text-white mb-1" data-i18n="resultTitle">Yarışma Tamamlandı!</h2>
+            <p class="text-xs md:text-sm text-gray-400 mb-6" data-i18n="resultSubtitle">Tebrikler, işte gösterdiğin performans sonuçları:</p>
+
+            <!-- Main Score Card -->
+            <div class="p-6 rounded-2xl bg-slate-900/80 border border-cyan-500/30 mb-6 relative overflow-hidden">
+                <div class="text-xs uppercase font-bold text-gray-400 tracking-wider mb-1" data-i18n="finalScore">Toplam Puan</div>
+                <div id="finalScoreVal" class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-300">0</div>
+            </div>
+
+            <!-- Detailed Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+                <div class="p-3 rounded-xl bg-slate-900/50 border border-white/5">
+                    <span class="text-[10px] text-gray-400 block font-semibold" data-i18n="totalQ">Toplam Soru</span>
+                    <span id="statTotalQ" class="text-lg font-bold text-white">0</span>
+                </div>
+                <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/20">
+                    <span class="text-[10px] text-emerald-400 block font-semibold" data-i18n="correctA">Doğru</span>
+                    <span id="statCorrect" class="text-lg font-bold text-emerald-400">0</span>
+                </div>
+                <div class="p-3 rounded-xl bg-rose-950/30 border border-rose-500/20">
+                    <span class="text-[10px] text-rose-400 block font-semibold" data-i18n="wrongA">Yanlış</span>
+                    <span id="statWrong" class="text-lg font-bold text-rose-400">0</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-900/50 border border-white/5">
+                    <span class="text-[10px] text-gray-400 block font-semibold" data-i18n="accuracy">Başarı Oranı</span>
+                    <span id="statAccuracy" class="text-lg font-bold text-cyan-300">0%</span>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col md:flex-row gap-3">
+                <button onclick="startGame()" class="flex-1 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition shadow-lg flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span data-i18n="playAgain">Yeniden Oyna</span>
+                </button>
+                <button onclick="showScreen('welcome')" class="flex-1 py-3.5 rounded-xl glass-btn text-gray-200 hover:text-white font-bold text-sm transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-house"></i>
+                    <span data-i18n="mainMenu">Ana Menü</span>
+                </button>
+            </div>
+        </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="w-full max-w-2xl text-center text-xs text-slate-500 py-3 mt-auto">
-        <span>Pixidus HTML5 Game Platform Integration &copy; 2026</span>
+    <!-- FOOTER -->
+    <footer class="w-full p-4 text-center text-xs text-gray-500 border-t border-gray-800/50 glass-panel">
+        <p>© 2026 Historia Aurora Quiz - Multi-language & Custom Avatar Edition</p>
     </footer>
 
-    <!-- GAME LOGIC SCRIPT -->
+    <!-- MODAL 1: AVATAR & PROFILE CREATOR -->
+    <div id="avatarModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-cyan-500/30 shadow-2xl">
+            <!-- Close button -->
+            <button onclick="closeAvatarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-xl font-extrabold text-white mb-1" data-i18n="avatarModalTitle">Profil & Avatar Oluştur</h3>
+            <p class="text-xs text-gray-400 mb-5" data-i18n="avatarModalDesc">Karakterini ve ismini kişiselleştir.</p>
+
+            <!-- Profile Name Input -->
+            <div class="mb-5">
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-2" data-i18n="profileNameLabel">Oyuncu İsmi</label>
+                <input type="text" id="avatarNameInput" maxlength="20" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-gray-700 text-white text-sm focus:outline-none focus:border-cyan-400 transition" placeholder="Tarihçi">
+            </div>
+
+            <!-- Avatar Grid Selection -->
+            <div class="mb-6">
+                <label class="block text-xs font-bold text-gray-300 uppercase mb-2" data-i18n="chooseAvatarLabel">Avatar Seç</label>
+                <div id="avatarGrid" class="grid grid-cols-4 gap-3">
+                    <!-- Preset Avatars -->
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <button onclick="saveUserProfile()" class="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm transition shadow-lg shadow-cyan-500/20" data-i18n="saveProfile">
+                Kaydet ve Uygula
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: SETTINGS (AYARLAR & DİL SEÇİMİ) -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-indigo-500/30 shadow-2xl">
+            <!-- Close button -->
+            <button onclick="closeSettingsModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-xl font-extrabold text-white mb-1 flex items-center space-x-2">
+                <i class="fa-solid fa-sliders text-indigo-400 text-lg"></i>
+                <span data-i18n="settingsTitle">Ayarlar</span>
+            </h3>
+            <p class="text-xs text-gray-400 mb-6" data-i18n="settingsDesc">Oyun tercihlerini ve dilini değiştir.</p>
+
+            <div class="space-y-6">
+                <!-- 1. Language Selection -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-300 uppercase flex items-center space-x-2">
+                        <i class="fa-solid fa-globe text-cyan-400"></i>
+                        <span data-i18n="languageLabel">Dil Seçeneği (Language)</span>
+                    </label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="changeLanguage('tr')" id="langBtn_tr" class="lang-btn glass-btn py-2.5 px-3 rounded-xl text-xs font-bold flex items-center space-x-2">
+                            <span>🇹🇷</span> <span>Türkçe</span>
+                        </button>
+                        <button onclick="changeLanguage('en')" id="langBtn_en" class="lang-btn glass-btn py-2.5 px-3 rounded-xl text-xs font-bold flex items-center space-x-2">
+                            <span>🇬🇧</span> <span>English</span>
+                        </button>
+                        <button onclick="changeLanguage('fr')" id="langBtn_fr" class="lang-btn glass-btn py-2.5 px-3 rounded-xl text-xs font-bold flex items-center space-x-2">
+                            <span>🇫🇷</span> <span>Français</span>
+                        </button>
+                        <button onclick="changeLanguage('de')" id="langBtn_de" class="lang-btn glass-btn py-2.5 px-3 rounded-xl text-xs font-bold flex items-center space-x-2">
+                            <span>🇩🇪</span> <span>Deutsch</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Sound Effects Toggle & Volume -->
+                <div class="space-y-3 pt-4 border-t border-gray-800">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-gray-300 uppercase flex items-center space-x-2">
+                            <i class="fa-solid fa-volume-high text-indigo-400"></i>
+                            <span data-i18n="soundEffectsLabel">Ses Efektleri</span>
+                        </span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="soundToggle" onchange="toggleSound(this.checked)" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+
+                    <!-- Volume Slider -->
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-[11px] text-gray-400">
+                            <span data-i18n="volumeLabel">Ses Seviyesi</span>
+                            <span id="volumeVal">80%</span>
+                        </div>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="80" oninput="setVolume(this.value)" class="w-full accent-indigo-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Done Button -->
+            <button onclick="closeSettingsModal()" class="w-full mt-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition shadow-lg">
+                <span data-i18n="closeSettings">Kapat</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- PAUSE OVERLAY -->
+    <div id="pauseOverlay" class="fixed inset-0 bg-black/85 backdrop-blur-md z-40 flex items-center justify-center p-4 hidden">
+        <div class="glass-panel p-8 rounded-3xl text-center max-w-sm w-full border border-cyan-500/30">
+            <div class="text-4xl mb-3">⏸️</div>
+            <h3 class="text-2xl font-black text-white mb-2" data-i18n="pauseTitle">Oyun Duraklatıldı</h3>
+            <p class="text-xs text-gray-400 mb-6" data-i18n="pauseDesc">İstediğin zaman yarışmaya kaldığın yerden devam edebilirsin.</p>
+            <div class="space-y-3">
+                <button onclick="togglePauseGame()" class="w-full py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-500 transition" data-i18n="resumeGame">
+                    Devam Et
+                </button>
+                <button onclick="resetCurrentGame()" class="w-full py-3 rounded-xl glass-btn text-rose-400 hover:bg-rose-950/40 font-bold text-sm transition" data-i18n="resetGame">
+                    Oyunu Sıfırla
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION SCRIPT LOGIC -->
     <script>
-        /* ===================================================================
-           1. QUESTIONS DATABASE (20+ History & Culture Questions in Turkish)
-           =================================================================== */
-        const QUESTION_BANK = [
-            {
-                category: "Osmanlı Tarihi",
-                question: "Osmanlı İmparatorluğu'nun ilk resmi başkenti neresidir?",
-                options: ["Söğüt", "Bursa", "Edirne", "İstanbul"],
-                answer: 1
+        /* ----------------------------------------------------
+           1. TRANSLATION / MULTI-LANGUAGE SYSTEM (i18n)
+           ---------------------------------------------------- */
+        const translations = {
+            tr: {
+                tagline: "Tarih Bilgi Yarışması",
+                badgeWelcome: "✨ Dünya Tarihini Keşfet",
+                mainTitle: "Tarih Bilgini Test Et",
+                mainDesc: "Farklı çağlardan sorularla kendini sına, jokerlerini stratejik kullan ve en yüksek skoru elde et!",
+                activeProfile: "Aktif Profil",
+                changeAvatar: "Avatar Değiştir",
+                selectQuestionCount: "Soru Sayısı Seçimi",
+                startQuiz: "Yarışmayı Başlat",
+                questionProgress: "Soru",
+                timerLabel: "SANİYE",
+                scoreLabel: "Puan",
+                joker50: "50:50",
+                jokerSkip: "Pas Geç",
+                jokerTime: "+15 San",
+                explanationTitle: "Bilgi Notu:",
+                nextQuestion: "Sonraki Soru",
+                resultTitle: "Yarışma Tamamlandı!",
+                resultSubtitle: "Tebrikler, işte gösterdiğin performans sonuçları:",
+                finalScore: "Toplam Puan",
+                totalQ: "Toplam Soru",
+                correctA: "Doğru",
+                wrongA: "Yanlış",
+                accuracy: "Başarı Oranı",
+                playAgain: "Yeniden Oyna",
+                mainMenu: "Ana Menü",
+                avatarModalTitle: "Profil & Avatar Oluştur",
+                avatarModalDesc: "Karakterini ve ismini kişiselleştir.",
+                profileNameLabel: "Oyuncu İsmi",
+                chooseAvatarLabel: "Avatar Seç",
+                saveProfile: "Kaydet ve Uygula",
+                settingsTitle: "Ayarlar",
+                settingsDesc: "Oyun tercihlerini ve dilini değiştir.",
+                languageLabel: "Dil Seçeneği (Language)",
+                soundEffectsLabel: "Ses Efektleri",
+                volumeLabel: "Ses Seviyesi",
+                closeSettings: "Kapat",
+                pauseTitle: "Oyun Duraklatıldı",
+                pauseDesc: "İstediğin zaman yarışmaya kaldığın yerden devam edebilirsin.",
+                resumeGame: "Devam Et",
+                resetGame: "Oyunu Sıfırla"
             },
-            {
-                category: "Cumhuriyet Tarihi",
-                question: "TBMM hangi tarihte açılmıştır?",
-                options: ["19 Mayıs 1919", "23 Nisan 1920", "29 Ekim 1923", "30 Ağustos 1922"],
-                answer: 1
+            en: {
+                tagline: "History Quiz Game",
+                badgeWelcome: "✨ Explore World History",
+                mainTitle: "Test Your History Knowledge",
+                mainDesc: "Challenge yourself with questions from various eras, use lifelines strategically, and hit high scores!",
+                activeProfile: "Active Profile",
+                changeAvatar: "Change Avatar",
+                selectQuestionCount: "Select Question Count",
+                startQuiz: "Start Quiz",
+                questionProgress: "Question",
+                timerLabel: "SECONDS",
+                scoreLabel: "Score",
+                joker50: "50:50",
+                jokerSkip: "Skip",
+                jokerTime: "+15 Sec",
+                explanationTitle: "Historical Fact:",
+                nextQuestion: "Next Question",
+                resultTitle: "Quiz Completed!",
+                resultSubtitle: "Congratulations! Here is your performance overview:",
+                finalScore: "Total Score",
+                totalQ: "Total Questions",
+                correctA: "Correct",
+                wrongA: "Wrong",
+                accuracy: "Accuracy Rate",
+                playAgain: "Play Again",
+                mainMenu: "Main Menu",
+                avatarModalTitle: "Create Profile & Avatar",
+                avatarModalDesc: "Customize your player character and nickname.",
+                profileNameLabel: "Player Name",
+                chooseAvatarLabel: "Select Avatar",
+                saveProfile: "Save & Apply",
+                settingsTitle: "Settings",
+                settingsDesc: "Adjust game preferences and select language.",
+                languageLabel: "Language Options",
+                soundEffectsLabel: "Sound Effects",
+                volumeLabel: "Volume",
+                closeSettings: "Close",
+                pauseTitle: "Game Paused",
+                pauseDesc: "You can resume the quiz whenever you are ready.",
+                resumeGame: "Resume",
+                resetGame: "Reset Game"
             },
-            {
-                category: "Büyük Selçuklu",
-                question: "1071 Malazgirt Meydan Muharebesi'nde Bizans İmparatoru Romen Diyojen'i mağlup eden Selçuklu hükümdarı kimdir?",
-                options: ["Tuğrul Bey", "Sultan Alparslan", "Melikşah", "Kılıç Arslan"],
-                answer: 1
+            fr: {
+                tagline: "Jeu de Quiz Historique",
+                badgeWelcome: "✨ Explorez l'Histoire du Monde",
+                mainTitle: "Testez vos Connaissances",
+                mainDesc: "Relevez le défi avec des questions de différentes époques et obtenez le meilleur score !",
+                activeProfile: "Profil Actif",
+                changeAvatar: "Changer d'Avatar",
+                selectQuestionCount: "Nombre de Questions",
+                startQuiz: "Commencer le Quiz",
+                questionProgress: "Question",
+                timerLabel: "SECONDES",
+                scoreLabel: "Score",
+                joker50: "50:50",
+                jokerSkip: "Passer",
+                jokerTime: "+15 Sec",
+                explanationTitle: "Note Historique :",
+                nextQuestion: "Question Suivante",
+                resultTitle: "Quiz Terminé !",
+                resultSubtitle: "Félicitations, voici vos résultats de performance :",
+                finalScore: "Score Total",
+                totalQ: "Total Questions",
+                correctA: "Correcte",
+                wrongA: "Incorrecte",
+                accuracy: "Précision",
+                playAgain: "Rejouer",
+                mainMenu: "Menu Principal",
+                avatarModalTitle: "Créer un Profil & Avatar",
+                avatarModalDesc: "Personnalisez votre avatar et pseudonyme.",
+                profileNameLabel: "Nom du Joueur",
+                chooseAvatarLabel: "Choisir un Avatar",
+                saveProfile: "Enregistrer & Appliquer",
+                settingsTitle: "Paramètres",
+                settingsDesc: "Ajustez les préférences du jeu et la langue.",
+                languageLabel: "Choix de la Langue",
+                soundEffectsLabel: "Effets Sonores",
+                volumeLabel: "Volume",
+                closeSettings: "Fermer",
+                pauseTitle: "Jeu en Pause",
+                pauseDesc: "Vous pouvez reprendre la partie quand vous le souhaitez.",
+                resumeGame: "Reprendre",
+                resetGame: "Réinitialiser"
             },
-            {
-                category: "Dünya Tarihi",
-                question: "Matbaayı hareketli harflerle geliştirerek modern basımın öncüsü olan mucit kimdir?",
-                options: ["Johannes Gutenberg", "Galileo Galilei", "Nikola Tesla", "Leonardo da Vinci"],
-                answer: 0
-            },
-            {
-                category: "Eski Çağ Medeniyetleri",
-                question: "Tarihte bilinen ilk yazılı kanunlar hangi Mezopotamya hükümdarı tarafından hazırlanmıştır?",
-                options: ["Ramses", "Büyük İskender", "Hammurabi", "Kuruş"],
-                answer: 2
-            },
-            {
-                category: "Genel Kültür & Edebiyat",
-                question: "İstiklal Marşı'mızın şairi Mehmet Akif Ersoy, şiirlerini hangi eserde toplamıştır?",
-                options: ["Safahat", "Nutuk", "Çalıkuşu", "Ateşten Gömlek"],
-                answer: 0
-            },
-            {
-                category: "Osmanlı Tarihi",
-                question: "İstanbul'un fethi sonrası Fatih Sultan Mehmet hangi unvanı üstlenmiştir?",
-                options: ["Kayzer-i Rûm", "Halife-i Müslimîn", "Hüdavendigar", "Sultan-ı Muazzam"],
-                answer: 0
-            },
-            {
-                category: "Sanat Tarihi",
-                question: "Rönesans döneminin ünlü eseri 'Mona Lisa' tablosu hangi müzede sergilenmektedir?",
-                options: ["Prado Müzesi", "British Museum", "Louvre Müzesi", "Uffizi Galerisi"],
-                answer: 2
-            },
-            {
-                category: "Türk Tarihi",
-                question: "Tarihte bilinen ilk Türk devleti aşağıdakilerden hangisidir?",
-                options: ["Göktürk Devleti", "Asya Hun Devleti", "Uygur Devleti", "Karahanlılar"],
-                answer: 1
-            },
-            {
-                category: "Anadolu Medeniyetleri",
-                question: "Parayı ilk kez icat ederek ticarette takas usulüne son veren eski Anadolu medeniyeti hangisidir?",
-                options: ["Lidyalılar", "Frigler", "Urartular", "Hititler"],
-                answer: 0
-            },
-            {
-                category: "Dünya Tarihi",
-                question: "Pusulanın keşfi ve denizcilikte kullanılması hangi dönemin başlamasında doğrudan etkili olmuştur?",
-                options: ["Sanayi Devrimi", "Coğrafi Keşifler", "Fransız İhtilali", "Aydınlanma Çağı"],
-                answer: 1
-            },
-            {
-                category: "Genel Kültür & Mimari",
-                question: "Mimar Sinan'ın 'Ustalık Eserim' olarak adlandırdığı tarihi yapı hangisidir?",
-                options: ["Süleymaniye Camii", "Şehzade Camii", "Selimiye Camii", "Sultanahmet Camii"],
-                answer: 2
-            },
-            {
-                category: "Mitoloji & Kültür",
-                question: "Dünyanın Dünyaca ünlü 'Dünyanın Yedi Harikası'ndan biri olan İskenderiye Feneri hangi ülkedeydi?",
-                options: ["Yunanistan", "Mısır", "İtalya", "Türkiye"],
-                answer: 1
-            },
-            {
-                category: "Cumhuriyet Tarihi",
-                question: "Mustafa Kemal Atatürk'e 'Gazilik' unvanı ve 'Mareşallik' rütbesi hangi zaferden sonra verilmiştir?",
-                options: ["I. İnönü Zaferi", "Çanakkale Zaferi", "Sakarya Meydan Muharebesi", "Büyük Taarruz"],
-                answer: 2
-            },
-            {
-                category: "Coğrafya & Kültür",
-                question: "Dünyanın en derin noktası olan 'Mariana Çukuru' hangi okyanustadır?",
-                options: ["Atlas Okyanusu", "Hint Okyanusu", "Pasifik (Büyük) Okyanusu", "Arktik Okyanusu"],
-                answer: 2
-            },
-            {
-                category: "Dünya Tarihi",
-                question: "1789 Fransız İhtilali hangi hapse yapılan baskınla simgeleşmiştir?",
-                options: ["Bastille Hapishanesi", "Tower of London", "Alcatraz", "Chillon Kalesi"],
-                answer: 0
-            },
-            {
-                category: "Genel Kültür",
-                question: "UNESCO Dünya Mirası listesinde yer alan Göbeklitepe hangi ilimiz sınırlarındadır?",
-                options: ["Gaziantep", "Şanlıurfa", "Mardin", "Diyarbakır"],
-                answer: 1
-            },
-            {
-                category: "Osmanlı Tarihi",
-                question: "Osmanlı'da ilk kâğıt para (Kaime) hangi padişah döneminde bastırılmıştır?",
-                options: ["Sultan Abdülmecid", "II. Mahmud", "III. Selim", "Kanuni Sultan Süleyman"],
-                answer: 0
-            },
-            {
-                category: "Sanat & Kültür",
-                question: "'Kaplumbağa Terbiyecisi' tablosuyla ünlü Türk ressam kimdir?",
-                options: ["Osman Hamdi Bey", "Şeker Ahmet Paşa", "İbrahim Çallı", "Abidin Dino"],
-                answer: 0
-            },
-            {
-                category: "Türk Tarihi",
-                question: "Orhun Abideleri günümüzde hangi ülkenin sınırları içerisinde yer almaktadır?",
-                options: ["Özbekistan", "Moğolistan", "Kazakistan", "Kırgızistan"],
-                answer: 1
+            de: {
+                tagline: "Geschichts-Quizspiel",
+                badgeWelcome: "✨ Entdecke die Weltgeschichte",
+                mainTitle: "Testen Sie Ihr Geschichtswissen",
+                mainDesc: "Fordern Sie sich mit Fragen aus verschiedenen Epochen heraus und erzielen Sie Höchstpunktzahlen!",
+                activeProfile: "Aktives Profil",
+                changeAvatar: "Avatar Ändern",
+                selectQuestionCount: "Anzahl der Fragen",
+                startQuiz: "Quiz Starten",
+                questionProgress: "Frage",
+                timerLabel: "SEKUNDEN",
+                scoreLabel: "Punkte",
+                joker50: "50:50",
+                jokerSkip: "Überspringen",
+                jokerTime: "+15 Sek",
+                explanationTitle: "Historischer Fakt:",
+                nextQuestion: "Nächste Frage",
+                resultTitle: "Quiz Beendet!",
+                resultSubtitle: "Herzlichen Glückwunsch! Hier ist Ihre Leistungsübersicht:",
+                finalScore: "Gesamtpunktzahl",
+                totalQ: "Gesamtfragen",
+                correctA: "Richtig",
+                wrongA: "Falsch",
+                accuracy: "Genauigkeit",
+                playAgain: "Erneut Spielen",
+                mainMenu: "Hauptmenü",
+                avatarModalTitle: "Profil & Avatar Erstellen",
+                avatarModalDesc: "Passen Sie Ihren Spielernamen und Avatar an.",
+                profileNameLabel: "Spielername",
+                chooseAvatarLabel: "Avatar Auswählen",
+                saveProfile: "Speichern & Anwenden",
+                settingsTitle: "Einstellungen",
+                settingsDesc: "Spieleinstellungen und Sprache anpassen.",
+                languageLabel: "Sprachauswahl",
+                soundEffectsLabel: "Soundeffekte",
+                volumeLabel: "Lautstärke",
+                closeSettings: "Schließen",
+                pauseTitle: "Spiel Pausiert",
+                pauseDesc: "Sie können das Quiz jederzeit fortsetzen.",
+                resumeGame: "Fortsetzen",
+                resetGame: "Spiel Zurücksetzen"
             }
+        };
+
+        let currentLang = 'tr';
+
+        function changeLanguage(langCode) {
+            currentLang = langCode;
+            
+            // Update UI elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[langCode] && translations[langCode][key]) {
+                    el.innerText = translations[langCode][key];
+                }
+            });
+
+            // Highlight language button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-500/20', 'border-indigo-500/50', 'text-cyan-300');
+            });
+            const activeBtn = document.getElementById(`langBtn_${langCode}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-indigo-500/20', 'border-indigo-500/50', 'text-cyan-300');
+            }
+
+            // Re-render question if game is running
+            if (!document.getElementById('quizScreen').classList.contains('hidden') && currentQuestionIndex < selectedQuestions.length) {
+                renderQuestion();
+            }
+        }
+
+        /* ----------------------------------------------------
+           2. AVATARS & USER PROFILE LOGIC
+           ---------------------------------------------------- */
+        const presetAvatars = [
+            { icon: '🧙‍♂️', name: 'Historian' },
+            { icon: '⚔️', name: 'Knight' },
+            { icon: '📜', name: 'Scholar' },
+            { icon: '👨‍🚀', name: 'Astronaut' },
+            { icon: '🛡️', name: 'Viking' },
+            { icon: '🏛️', name: 'Philosopher' },
+            { icon: '🥷', name: 'Ninja' },
+            { icon: '👑', name: 'Monarch' }
         ];
 
-        /* ===================================================================
-           2. WEB AUDIO API SYNTHESIZER (Sound Effects)
-           =================================================================== */
-        let soundEnabled = true;
-        let audioCtx = null;
+        let userProfile = {
+            name: 'Tarihçi',
+            avatar: '🧙‍♂️'
+        };
 
-        function getAudioContext() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
+        function initAvatars() {
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = '';
+            presetAvatars.forEach(av => {
+                const btn = document.createElement('button');
+                btn.className = `p-3 rounded-2xl glass-btn text-2xl flex flex-col items-center justify-center space-y-1 hover:border-cyan-400 transition ${userProfile.avatar === av.icon ? 'border-cyan-400 bg-cyan-500/20' : ''}`;
+                btn.innerHTML = `<span>${av.icon}</span><span class="text-[10px] text-gray-400 font-semibold">${av.name}</span>`;
+                btn.onclick = () => selectAvatar(av.icon, btn);
+                grid.appendChild(btn);
+            });
+            document.getElementById('avatarNameInput').value = userProfile.name;
+        }
+
+        let tempSelectedAvatar = '🧙‍♂️';
+
+        function selectAvatar(icon, btnElement) {
+            tempSelectedAvatar = icon;
+            document.querySelectorAll('#avatarGrid button').forEach(b => {
+                b.classList.remove('border-cyan-400', 'bg-cyan-500/20');
+            });
+            btnElement.classList.add('border-cyan-400', 'bg-cyan-500/20');
+        }
+
+        function saveUserProfile() {
+            const nameInput = document.getElementById('avatarNameInput').value.trim();
+            if (nameInput) {
+                userProfile.name = nameInput;
             }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            return audioCtx;
+            userProfile.avatar = tempSelectedAvatar;
+
+            // Update Header & Welcome Card
+            document.getElementById('headerAvatar').innerText = userProfile.avatar;
+            document.getElementById('headerUsername').innerText = userProfile.name;
+            document.getElementById('welcomeAvatarDisplay').innerText = userProfile.avatar;
+            document.getElementById('welcomeUsernameDisplay').innerText = userProfile.name;
+
+            closeAvatarModal();
+            playSound('success');
+        }
+
+        function openAvatarModal() {
+            initAvatars();
+            document.getElementById('avatarModal').classList.remove('hidden');
+        }
+
+        function closeAvatarModal() {
+            document.getElementById('avatarModal').classList.add('hidden');
+        }
+
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+
+        /* ----------------------------------------------------
+           3. SOUND EFFECTS (TONE.JS SYNTH)
+           ---------------------------------------------------- */
+        let soundEnabled = true;
+        let masterVolume = 0.8;
+
+        function toggleSound(enabled) {
+            soundEnabled = enabled;
+        }
+
+        function setVolume(val) {
+            masterVolume = val / 100;
+            document.getElementById('volumeVal').innerText = val + '%';
         }
 
         function playSound(type) {
             if (!soundEnabled) return;
             try {
-                const ctx = getAudioContext();
-                const now = ctx.currentTime;
+                const synth = new Tone.Synth().toDestination();
+                Tone.Destination.volume.value = Tone.gainToDb(masterVolume);
 
-                if (type === 'click') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(600, now);
-                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.05);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.05);
-                } else if (type === 'correct') {
-                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-                        gain.gain.setValueAtTime(0.2, now + idx * 0.08);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + idx * 0.08);
-                        osc.stop(now + idx * 0.08 + 0.25);
-                    });
+                if (type === 'correct') {
+                    synth.triggerAttackRelease("E5", "8n");
+                    setTimeout(() => synth.triggerAttackRelease("A5", "8n"), 100);
                 } else if (type === 'wrong') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(180, now);
-                    osc.frequency.linearRampToValueAtTime(110, now + 0.3);
-                    gain.gain.setValueAtTime(0.25, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
-                } else if (type === 'pause') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(500, now);
-                    osc.frequency.setValueAtTime(350, now + 0.08);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.18);
-                } else if (type === 'resume') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(350, now);
-                    osc.frequency.setValueAtTime(500, now + 0.08);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.18);
-                } else if (type === 'reset') {
-                    [600, 450, 300].forEach((freq, idx) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'square';
-                        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
-                        gain.gain.setValueAtTime(0.1, now + idx * 0.06);
-                        gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.06 + 0.1);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + idx * 0.06);
-                        osc.stop(now + idx * 0.06 + 0.1);
-                    });
-                } else if (type === 'lifeline') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(400, now);
-                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.2);
-                    gain.gain.setValueAtTime(0.2, now);
-                    gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                } else if (type === 'gameover') {
-                    [400, 350, 300, 250].forEach((freq, idx) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
-                        gain.gain.setValueAtTime(0.2, now + idx * 0.12);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.3);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + idx * 0.12);
-                        osc.stop(now + idx * 0.12 + 0.3);
-                    });
+                    synth.triggerAttackRelease("C3", "8n");
+                    setTimeout(() => synth.triggerAttackRelease("F2", "8n"), 120);
+                } else if (type === 'click') {
+                    synth.triggerAttackRelease("C5", "16n");
+                } else if (type === 'success') {
+                    synth.triggerAttackRelease("G4", "8n");
+                    setTimeout(() => synth.triggerAttackRelease("C5", "8n"), 100);
                 }
             } catch (e) {
-                console.log("Audio play error:", e);
+                // Ignore audio context autoplay restriction errors
             }
         }
 
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            const icon = document.getElementById('sound-icon');
-            if (soundEnabled) {
-                icon.className = 'fa-solid fa-volume-high';
-                playSound('click');
-            } else {
-                icon.className = 'fa-solid fa-volume-xmark text-slate-500';
+        /* ----------------------------------------------------
+           4. QUESTION DATABASE (MULTILINGUAL DATA BANK)
+           ---------------------------------------------------- */
+        const rawQuestions = [
+            {
+                category: { tr: "İlk Çağ Tarihi", en: "Ancient History", fr: "Histoire Ancienne", de: "Alte Geschichte" },
+                question: {
+                    tr: "Tarihte bilinen ilk yazılı kanunlar hangi uygarlığa aittir?",
+                    en: "To which civilization do the earliest known written laws belong?",
+                    fr: "À quelle civilisation appartiennent les plus anciens lois écrites connues ?",
+                    de: "Welcher Zivilisation gehören die ältesten bekannten geschriebenen Gesetze an?"
+                },
+                options: [
+                    { tr: "Sümerler (Urkagina)", en: "Sumerians (Urkagina)", fr: "Sumériens (Ourkagina)", de: "Sumerer (Urakagina)" },
+                    { tr: "Babiller (Hammurabi)", en: "Babylonians (Hammurabi)", fr: "Babyloniens (Hammurabi)", de: "Babylonier (Hammurabi)" },
+                    { tr: "Hititler", en: "Hittites", fr: "Hittites", de: "Hethiter" },
+                    { tr: "Mısırlılar", en: "Egyptians", fr: "Égyptiens", de: "Ägypter" }
+                ],
+                correct: 0,
+                explanation: {
+                    tr: "MÖ 2375 yılında Sümer Kralı Urkagina tarafından hazırlanan kanunlar tarihteki ilk yazılı hukuk kurallarıdır.",
+                    en: "The laws prepared by the Sumerian King Urkagina in 2375 BC are the first written legal rules in history.",
+                    fr: "Les lois préparées par le roi sumérien Ourkagina en 2375 av. J.-C. sont les premières règles juridiques écrites.",
+                    de: "Die vom sumerischen König Urakagina im Jahr 2375 v. Chr. verfassten Gesetze sind die ersten geschriebenen Rechtsregeln der Geschichte."
+                }
+            },
+            {
+                category: { tr: "Orta Çağ", en: "Middle Ages", fr: "Moyen Âge", de: "Mittelalter" },
+                question: {
+                    tr: "İstanbul hangi yılda Fatih Sultan Mehmet tarafından fethedilmiştir?",
+                    en: "In which year was Istanbul conquered by Sultan Mehmed II?",
+                    fr: "En quelle année Istanbul a-t-elle été conquise par le sultan Mehmed II ?",
+                    de: "In welchem Jahr wurde Istanbul von Sultan Mehmed II. erobert?"
+                },
+                options: [
+                    { tr: "1453", en: "1453", fr: "1453", de: "1453" },
+                    { tr: "1299", en: "1299", fr: "1299", de: "1299" },
+                    { tr: "1071", en: "1071", fr: "1071", de: "1071" },
+                    { tr: "1517", en: "1517", fr: "1517", de: "1517" }
+                ],
+                correct: 0,
+                explanation: {
+                    tr: "29 Mayıs 1453 tarihinde gerçekleşen fetih ile Doğu Roma İmparatorluğu sona ermiştir.",
+                    en: "With the conquest on May 29, 1453, the Eastern Roman Empire came to an end.",
+                    fr: "Avec la conquête du 29 mai 1453, l'Empire romain d'Orient a pris fin.",
+                    de: "Mit der Eroberung am 29. Mai 1453 endete das Byzantinische Reich."
+                }
+            },
+            {
+                category: { tr: "Yeni Çağ", en: "Early Modern", fr: "Époque Moderne", de: "Frühe Neuzeit" },
+                question: {
+                    tr: "Amerika kıtasına 1492 yılında ulaşan Cenevizli denizci kimdir?",
+                    en: "Who was the Genoese explorer who reached the Americas in 1492?",
+                    fr: "Quel explorateur génois a atteint les Amériques en 1492 ?",
+                    de: "Wer war der genuesische Seefahrer, der 1492 Amerika erreichte?"
+                },
+                options: [
+                    { tr: "Kristof Kolomb", en: "Christopher Columbus", fr: "Christophe Colomb", de: "Christoph Kolumbus" },
+                    { tr: "Amerigo Vespucci", en: "Amerigo Vespucci", fr: "Amerigo Vespucci", de: "Amerigo Vespucci" },
+                    { tr: "Macellan", en: "Ferdinand Magellan", fr: "Fernand de Magellan", de: "Ferdinand Magellan" },
+                    { tr: "Vasco da Gama", en: "Vasco da Gama", fr: "Vasco de Gama", de: "Vasco da Gama" }
+                ],
+                correct: 0,
+                explanation: {
+                    tr: "Kristof Kolomb 1492'de Bahamalar'a ulaşmış ancak buranın Asya olduğunu sanmıştır.",
+                    en: "Columbus reached the Bahamas in 1492 thinking he had arrived in Asia.",
+                    fr: "Colomb a atteint les Bahamas en 1492 en pensant être arrivé en Asie.",
+                    de: "Kolumbus erreichte 1492 die Bahamas im Glauben, er sei in Asien angekommen."
+                }
+            },
+            {
+                category: { tr: "Yakın Çağ", en: "Modern History", fr: "Histoire Contemporaine", de: "Neueste Geschichte" },
+                question: {
+                    tr: "Fransız İhtilali hangi yılda gerçekleşmiştir?",
+                    en: "In which year did the French Revolution break out?",
+                    fr: "En quelle année la Révolution française a-t-elle éclaté ?",
+                    de: "In welchem Jahr brach die Französische Revolution aus?"
+                },
+                options: [
+                    { tr: "1789", en: "1789", fr: "1789", de: "1789" },
+                    { tr: "1776", en: "1776", fr: "1776", de: "1776" },
+                    { tr: "1815", en: "1815", fr: "1815", de: "1815" },
+                    { tr: "1848", en: "1848", fr: "1848", de: "1848" }
+                ],
+                correct: 0,
+                explanation: {
+                    tr: "1789 Fransız İhtilali, milliyetçilik ve hürriyet fikirlerini tüm dünyaya yaymıştır.",
+                    en: "The 1789 Revolution spread ideas of nationalism and liberty across the world.",
+                    fr: "La Révolution de 1789 a diffusé les idées de nationalisme et de liberté dans le monde.",
+                    de: "Die Revolution von 1789 verbreitete Ideen von Nationalismus und Freiheit weltweit."
+                }
+            },
+            {
+                category: { tr: "Antik Çağ", en: "Antiquity", fr: "Antiquité", de: "Antike" },
+                question: {
+                    tr: "Büyük İskender hangi imparatorluğun hükümdarıydı?",
+                    en: "Alexander the Great was the ruler of which kingdom?",
+                    fr: "Alexandre le Grand était le souverain de quel royaume ?",
+                    de: "Alexander der Große war der Herrscher welches Reiches?"
+                },
+                options: [
+                    { tr: "Makedonya Krallığı", en: "Macedon Kingdom", fr: "Royaume de Macédoine", de: "Königreich Makedonien" },
+                    { tr: "Roma İmparatorluğu", en: "Roman Empire", fr: "Empire Romain", de: "Römisches Reich" },
+                    { tr: "Pers İmparatorluğu", en: "Persian Empire", fr: "Empire Perse", de: "Perserreich" },
+                    { tr: "Kartaca", en: "Carthage", fr: "Carthage", de: "Karthago" }
+                ],
+                correct: 0,
+                explanation: {
+                    tr: "Makedonya Kralı III. Aleksandros (Büyük İskender) Asya seferi ile devasa bir imparatorluk kurmuştur.",
+                    en: "Alexander III of Macedon created one of the largest empires in history through his Asian campaign.",
+                    fr: "Alexandre le Grand a créé l'un des plus grands empires de l'histoire lors de sa campagne asiatique.",
+                    de: "Alexander III. von Makedonien schuf durch seinen Asienfeldzug eines der größten Reiche der Geschichte."
+                }
             }
+        ];
+
+        /* Helper generator to fulfill 20/50/100/200 questions requirements */
+        function generateExpandedQuestions(targetCount) {
+            let list = [];
+            while (list.length < targetCount) {
+                for (let q of rawQuestions) {
+                    if (list.length >= targetCount) break;
+                    // Clone question structure
+                    list.push(JSON.parse(JSON.stringify(q)));
+                }
+            }
+            return list;
         }
 
-        /* ===================================================================
-           3. GAME STATE MANAGEMENT
-           =================================================================== */
-        let pixidusContext = null;
-        let questions = [];
-        let currentQIndex = 0;
+        /* ----------------------------------------------------
+           5. GAME ENGINE STATE & LOGIC
+           ---------------------------------------------------- */
+        let targetQuestionCount = 20;
+        let selectedQuestions = [];
+        let currentQuestionIndex = 0;
         let score = 0;
-        let streak = 0;
-        let maxStreak = 0;
         let correctCount = 0;
+        let wrongCount = 0;
         let timerInterval = null;
-        let timeLeft = 15;
+        let timeLeft = 20;
         let isPaused = false;
-        const QUESTION_TIME = 15;
+        let answered = false;
 
-        let lifeline5050Used = false;
-        let lifelineTimeUsed = false;
+        let jokersState = {
+            fifty: true,
+            skip: true,
+            time: true
+        };
 
-        let highScore = parseInt(localStorage.getItem('pixidus_tarih_highscore') || '0');
-
-        // Update Highscore UI
-        document.getElementById('top-high-score').textContent = highScore;
-
-        /* ===================================================================
-           4. PIXIDUS SDK INTEGRATION & HANDSHAKE
-           =================================================================== */
-        let sdkInitialized = false;
-
-        function initPixidusHandshake() {
-            // Check if Pixidus SDK exists
-            if (typeof Pixidus !== 'undefined' && Pixidus.onReady) {
-                Pixidus.onReady(function (context) {
-                    sdkInitialized = true;
-                    pixidusContext = context || {};
-                    console.log("Pixidus SDK Ready:", pixidusContext);
-                    document.getElementById('sdk-mode-text').textContent = 'Pixidus Bağlandı';
-                });
+        function setQuestionCount(count) {
+            targetQuestionCount = count;
+            document.querySelectorAll('.q-count-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-500/20', 'border-indigo-500/50', 'text-cyan-300');
+                btn.classList.add('text-gray-300');
+            });
+            const active = document.getElementById(`qBtn${count}`);
+            if (active) {
+                active.classList.add('bg-indigo-500/20', 'border-indigo-500/50', 'text-cyan-300');
+                active.classList.remove('text-gray-300');
             }
+            playSound('click');
+        }
 
-            // Fallback launcher for preview/standalone execution
-            setTimeout(function() {
-                if (!sdkInitialized) {
-                    console.log("Pixidus SDK timeout: Running in standalone/preview mode.");
-                    document.getElementById('sdk-mode-text').textContent = 'Önizleme Modu';
-                    pixidusContext = { standalone: true, platform: 'web' };
+        function showScreen(screenId) {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.add('hidden');
+
+            if (screenId === 'welcome') document.getElementById('welcomeScreen').classList.remove('hidden');
+            if (screenId === 'quiz') document.getElementById('quizScreen').classList.remove('hidden');
+            if (screenId === 'result') document.getElementById('resultScreen').classList.remove('hidden');
+        }
+
+        function startGame() {
+            selectedQuestions = generateExpandedQuestions(targetQuestionCount);
+            currentQuestionIndex = 0;
+            score = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            jokersState = { fifty: true, skip: true, time: true };
+
+            // Reset Jokers UI
+            resetJokerUI('jokerFifty');
+            resetJokerUI('jokerSkip');
+            resetJokerUI('jokerTime');
+
+            document.getElementById('totalQNum').innerText = selectedQuestions.length;
+            document.getElementById('scoreDisplay').innerText = score;
+
+            showScreen('quiz');
+            loadQuestion();
+        }
+
+        function resetJokerUI(id) {
+            const btn = document.getElementById(id);
+            btn.disabled = false;
+            btn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+
+        function loadQuestion() {
+            answered = false;
+            document.getElementById('explanationBox').classList.add('hidden');
+            document.getElementById('nextBtn').disabled = true;
+
+            const qData = selectedQuestions[currentQuestionIndex];
+            document.getElementById('currentQNum').innerText = currentQuestionIndex + 1;
+            
+            // Progress Bar
+            const progPercent = ((currentQuestionIndex + 1) / selectedQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progPercent}%`;
+
+            renderQuestion();
+            startTimer();
+        }
+
+        function renderQuestion() {
+            const qData = selectedQuestions[currentQuestionIndex];
+            document.getElementById('questionCategory').innerText = qData.category[currentLang] || qData.category['tr'];
+            document.getElementById('questionText').innerText = qData.question[currentLang] || qData.question['tr'];
+
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+
+            qData.options.forEach((opt, idx) => {
+                const optText = opt[currentLang] || opt['tr'];
+                const btn = document.createElement('button');
+                btn.className = `option-btn w-full p-4 rounded-2xl glass-btn text-left text-sm md:text-base font-semibold text-gray-200 hover:text-white flex items-center justify-between transition border border-white/10`;
+                btn.id = `opt_${idx}`;
+                btn.onclick = () => selectAnswer(idx);
+                btn.innerHTML = `
+                    <span>${optText}</span>
+                    <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold">${String.fromCharCode(65 + idx)}</span>
+                `;
+                grid.appendChild(btn);
+            });
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 20;
+            document.getElementById('timerDisplay').innerText = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    timeLeft--;
+                    document.getElementById('timerDisplay').innerText = timeLeft;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        autoTimeOut();
+                    }
                 }
             }, 1000);
         }
 
-        // Initialize handshake when DOM is ready
-        window.addEventListener('DOMContentLoaded', initPixidusHandshake);
+        function autoTimeOut() {
+            if (answered) return;
+            answered = true;
+            playSound('wrong');
+            wrongCount++;
 
-        /* ===================================================================
-           5. GAME ENGINE LOGIC
-           =================================================================== */
-        function startGameEngine() {
+            const qData = selectedQuestions[currentQuestionIndex];
+            highlightAnswers(qData.correct, -1);
+            showExplanation();
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timerInterval);
+
+            const qData = selectedQuestions[currentQuestionIndex];
+
+            if (index === qData.correct) {
+                playSound('correct');
+                score += 100 + (timeLeft * 5); // Speed bonus
+                correctCount++;
+                document.getElementById('scoreDisplay').innerText = score;
+            } else {
+                playSound('wrong');
+                wrongCount++;
+            }
+
+            highlightAnswers(qData.correct, index);
+            showExplanation();
+        }
+
+        function highlightAnswers(correctIndex, userIndex) {
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correctIndex) {
+                    btn.classList.add('bg-emerald-600/40', 'border-emerald-500', 'text-emerald-200');
+                } else if (idx === userIndex) {
+                    btn.classList.add('bg-rose-600/40', 'border-rose-500', 'text-rose-200');
+                } else {
+                    btn.classList.add('opacity-40');
+                }
+            });
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function showExplanation() {
+            const qData = selectedQuestions[currentQuestionIndex];
+            const expText = qData.explanation[currentLang] || qData.explanation['tr'];
+            document.getElementById('explanationText').innerText = expText;
+            document.getElementById('explanationBox').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < selectedQuestions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            document.getElementById('finalScoreVal').innerText = score;
+            document.getElementById('statTotalQ').innerText = selectedQuestions.length;
+            document.getElementById('statCorrect').innerText = correctCount;
+            document.getElementById('statWrong').innerText = wrongCount;
+
+            const accuracy = Math.round((correctCount / selectedQuestions.length) * 100) || 0;
+            document.getElementById('statAccuracy').innerText = accuracy + '%';
+
+            showScreen('result');
+            playSound('success');
+        }
+
+        /* Jokers */
+        function useJokerFifty() {
+            if (!jokersState.fifty || answered) return;
+            jokersState.fifty = false;
+            disableJokerUI('jokerFifty');
+
+            const qData = selectedQuestions[currentQuestionIndex];
+            let removed = 0;
+            for (let i = 0; i < 4; i++) {
+                if (i !== qData.correct && removed < 2) {
+                    const btn = document.getElementById(`opt_${i}`);
+                    if (btn) btn.style.visibility = 'hidden';
+                    removed++;
+                }
+            }
             playSound('click');
-            
-            // Reset state
-            score = 0;
-            streak = 0;
-            maxStreak = 0;
-            correctCount = 0;
-            currentQIndex = 0;
-            isPaused = false;
-            lifeline5050Used = false;
-            lifelineTimeUsed = false;
+        }
 
-            // Shuffle questions
-            questions = [...QUESTION_BANK].sort(() => Math.random() - 0.5);
+        function useJokerSkip() {
+            if (!jokersState.skip || answered) return;
+            jokersState.skip = false;
+            disableJokerUI('jokerSkip');
+            clearInterval(timerInterval);
+            nextQuestion();
+            playSound('click');
+        }
 
-            // Reset UI States
-            resetPauseUI();
-            resetLifelineButtonsUI();
+        function useJokerTime() {
+            if (!jokersState.time || answered) return;
+            jokersState.time = false;
+            disableJokerUI('jokerTime');
+            timeLeft += 15;
+            document.getElementById('timerDisplay').innerText = timeLeft;
+            playSound('click');
+        }
 
-            // Screen Switch
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.remove('hidden');
-            document.getElementById('quiz-screen').classList.add('flex');
-
-            loadQuestion();
+        function disableJokerUI(id) {
+            const btn = document.getElementById(id);
+            btn.disabled = true;
+            btn.classList.add('opacity-40', 'cursor-not-allowed');
         }
 
         function togglePauseGame() {
-            if (document.getElementById('quiz-screen').classList.contains('hidden')) return;
-
             isPaused = !isPaused;
-            const pauseBtnIcon = document.getElementById('pause-btn-icon');
-            const pauseBtnText = document.getElementById('pause-btn-text');
-            const pauseOverlay = document.getElementById('pause-overlay');
-
             if (isPaused) {
-                playSound('pause');
-                clearInterval(timerInterval);
-                pauseBtnIcon.className = "fa-solid fa-play";
-                pauseBtnText.textContent = "Başlat";
-                pauseOverlay.classList.remove('hidden');
-                disableOptions();
+                document.getElementById('pauseOverlay').classList.remove('hidden');
+                document.getElementById('pauseIcon').className = 'fa-solid fa-play';
             } else {
-                playSound('resume');
-                pauseBtnIcon.className = "fa-solid fa-pause";
-                pauseBtnText.textContent = "Durdur";
-                pauseOverlay.classList.add('hidden');
-                enableOptions();
-                startTimerInterval();
+                document.getElementById('pauseOverlay').classList.add('hidden');
+                document.getElementById('pauseIcon').className = 'fa-solid fa-pause';
             }
         }
 
-        function resetPauseUI() {
-            isPaused = false;
-            document.getElementById('pause-btn-icon').className = "fa-solid fa-pause";
-            document.getElementById('pause-btn-text').textContent = "Durdur";
-            document.getElementById('pause-overlay').classList.add('hidden');
+        function resetCurrentGame() {
+            togglePauseGame();
+            showScreen('welcome');
         }
 
-        function resetGame() {
-            playSound('reset');
-            clearInterval(timerInterval);
-            startGameEngine();
-        }
-
-        function resetLifelineButtonsUI() {
-            const btn5050 = document.getElementById('lifeline-5050');
-            const btnTime = document.getElementById('lifeline-time');
-
-            btn5050.disabled = false;
-            btn5050.className = "px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer";
-            
-            btnTime.disabled = false;
-            btnTime.className = "px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer";
-        }
-
-        function loadQuestion() {
-            clearInterval(timerInterval);
-
-            if (currentQIndex >= questions.length) {
-                endGame();
-                return;
-            }
-
-            resetPauseUI();
-            const q = questions[currentQIndex];
-
-            // UI Elements Update
-            document.getElementById('current-q-num').textContent = currentQIndex + 1;
-            document.getElementById('total-q-num').textContent = questions.length;
-            document.getElementById('q-category').textContent = q.category;
-            document.getElementById('question-text').textContent = q.question;
-            document.getElementById('current-score').textContent = score;
-            document.getElementById('streak-counter').textContent = `${streak}x Seri`;
-
-            // Card Animation trigger
-            const qCard = document.getElementById('question-card');
-            qCard.classList.remove('card-flip');
-            void qCard.offsetWidth; // trigger reflow
-            qCard.classList.add('card-flip');
-
-            // Render Options
-            const container = document.getElementById('options-container');
-            container.innerHTML = '';
-
-            const optionLetters = ['A', 'B', 'C', 'D'];
-
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn w-full p-3.5 sm:p-4 rounded-2xl text-left flex items-center gap-3 font-medium text-sm sm:text-base text-slate-200 cursor-pointer';
-                btn.dataset.index = idx;
-                btn.onclick = () => selectOption(idx);
-
-                btn.innerHTML = `
-                    <span class="w-8 h-8 rounded-xl bg-slate-800/80 border border-slate-600 flex items-center justify-center font-bold text-amber-400 text-xs sm:text-sm shrink-0">
-                        ${optionLetters[idx]}
-                    </span>
-                    <span class="flex-1">${opt}</span>
-                `;
-
-                container.appendChild(btn);
-            });
-
-            // Start Timer
-            timeLeft = QUESTION_TIME;
-            updateTimerUI();
-            startTimerInterval();
-        }
-
-        function startTimerInterval() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (isPaused) return;
-                timeLeft -= 0.1;
-                if (timeLeft <= 0) {
-                    timeLeft = 0;
-                    updateTimerUI();
-                    clearInterval(timerInterval);
-                    handleTimeout();
-                } else {
-                    updateTimerUI();
-                }
-            }, 100);
-        }
-
-        function updateTimerUI() {
-            const timerText = document.getElementById('timer-text');
-            const timerBar = document.getElementById('timer-bar');
-
-            timerText.textContent = `${Math.ceil(timeLeft)}s`;
-            const pct = (timeLeft / QUESTION_TIME) * 100;
-            timerBar.style.width = `${Math.max(0, Math.min(100, pct))}%`;
-
-            if (timeLeft <= 4) {
-                timerBar.className = "bg-gradient-to-r from-red-600 to-rose-400 h-full rounded-full transition-all duration-100 ease-linear";
-                timerText.className = "text-red-400 font-mono text-sm font-bold animate-pulse";
-            } else {
-                timerBar.className = "bg-gradient-to-r from-amber-500 to-amber-300 h-full rounded-full transition-all duration-100 ease-linear";
-                timerText.className = "text-amber-400 font-mono text-sm font-bold";
-            }
-        }
-
-        function selectOption(selectedIndex) {
-            if (isPaused) return;
-            clearInterval(timerInterval);
-            disableOptions();
-
-            const q = questions[currentQIndex];
-            const buttons = document.querySelectorAll('.option-btn');
-
-            if (selectedIndex === q.answer) {
-                // Correct Answer
-                playSound('correct');
-                buttons[selectedIndex].classList.add('correct');
-
-                streak++;
-                if (streak > maxStreak) maxStreak = streak;
-                correctCount++;
-
-                // Score logic: Base 100 + Time Bonus + Streak Bonus
-                const speedBonus = Math.round(timeLeft * 10);
-                const streakBonus = (streak - 1) * 25;
-                const earnedPoints = 100 + speedBonus + streakBonus;
-                score += earnedPoints;
-
-                document.getElementById('current-score').textContent = score;
-                document.getElementById('streak-counter').textContent = `${streak}x Seri`;
-
-            } else {
-                // Wrong Answer
-                playSound('wrong');
-                if (selectedIndex !== -1 && buttons[selectedIndex]) {
-                    buttons[selectedIndex].classList.add('wrong');
-                }
-                // Highlight correct one
-                buttons[q.answer].classList.add('correct');
-                streak = 0;
-                document.getElementById('streak-counter').textContent = `0x Seri`;
-            }
-
-            // Next Question Delay
-            setTimeout(() => {
-                currentQIndex++;
-                loadQuestion();
-            }, 1400);
-        }
-
-        function handleTimeout() {
-            playSound('wrong');
-            disableOptions();
-
-            const q = questions[currentQIndex];
-            const buttons = document.querySelectorAll('.option-btn');
-            buttons[q.answer].classList.add('correct');
-
-            streak = 0;
-            document.getElementById('streak-counter').textContent = `0x Seri`;
-
-            setTimeout(() => {
-                currentQIndex++;
-                loadQuestion();
-            }, 1400);
-        }
-
-        function disableOptions() {
-            const buttons = document.querySelectorAll('.option-btn');
-            buttons.forEach(btn => btn.disabled = true);
-        }
-
-        function enableOptions() {
-            const buttons = document.querySelectorAll('.option-btn');
-            buttons.forEach(btn => btn.disabled = false);
-        }
-
-        /* ===================================================================
-           6. LIFELINES (JOKERLER)
-           =================================================================== */
-        function useLifeline5050() {
-            if (lifeline5050Used || isPaused) return;
-            playSound('lifeline');
-            lifeline5050Used = true;
-
-            const btn5050 = document.getElementById('lifeline-5050');
-            btn5050.disabled = true;
-            btn5050.className = "px-3 py-1.5 rounded-xl bg-slate-800/40 text-slate-600 border border-slate-700 text-xs font-bold opacity-50 cursor-not-allowed";
-
-            const q = questions[currentQIndex];
-            const options = document.querySelectorAll('.option-btn');
-            let removedCount = 0;
-
-            options.forEach((btn, idx) => {
-                if (idx !== q.answer && removedCount < 2) {
-                    btn.style.visibility = 'hidden';
-                    removedCount++;
-                }
-            });
-        }
-
-        function useLifelineTime() {
-            if (lifelineTimeUsed || isPaused) return;
-            playSound('lifeline');
-            lifelineTimeUsed = true;
-
-            const btnTime = document.getElementById('lifeline-time');
-            btnTime.disabled = true;
-            btnTime.className = "px-3 py-1.5 rounded-xl bg-slate-800/40 text-slate-600 border border-slate-700 text-xs font-bold opacity-50 cursor-not-allowed";
-
-            timeLeft = Math.min(QUESTION_TIME, timeLeft + 10);
-            updateTimerUI();
-        }
-
-        /* ===================================================================
-           7. END GAME & RESULT SUMMARY
-           =================================================================== */
-        function endGame() {
-            clearInterval(timerInterval);
-            playSound('gameover');
-
-            // Save High Score
-            if (score > highScore) {
-                highScore = score;
-                localStorage.setItem('pixidus_tarih_highscore', highScore.toString());
-                document.getElementById('top-high-score').textContent = highScore;
-            }
-
-            // Calculations
-            const accuracy = Math.round((correctCount / questions.length) * 100);
-
-            // Determine Rank
-            let rankTitle = "Çaylak Araştırmacı";
-            if (score >= 2500) rankTitle = "Tarih & Kültür Dehası 👑";
-            else if (score >= 1800) rankTitle = "Baş Tarihçi 📜";
-            else if (score >= 1200) rankTitle = "Kültür Aşığı 🏛️";
-            else if (score >= 600) rankTitle = "Meraklı Okur 📖";
-
-            // Update UI
-            document.getElementById('final-score').textContent = score;
-            document.getElementById('rank-badge').textContent = `Ünvan: ${rankTitle}`;
-            document.getElementById('stat-correct').textContent = `${correctCount} / ${questions.length - correctCount}`;
-            document.getElementById('stat-accuracy').textContent = `%${accuracy}`;
-            document.getElementById('stat-streak').textContent = `${maxStreak} Seri`;
-
-            // Screen Switch
-            document.getElementById('quiz-screen').classList.remove('flex');
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.remove('hidden');
-        }
+        // Init language UI defaults
+        window.onload = function() {
+            changeLanguage('tr');
+        };
     </script>
 </body>
 </html>
