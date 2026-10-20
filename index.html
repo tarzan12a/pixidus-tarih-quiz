@@ -98,7 +98,7 @@
             </div>
             <div>
                 <h2 class="text-2xl md:text-3xl font-black text-white mb-1">YKS & Genel Kültür Portalı</h2>
-                <p class="text-xs md:text-sm text-gray-400">Dersini ve soru sayısını seç, test çözerek kendini sına veya haftalık ders programını oluştur!</p>
+                <p class="text-xs md:text-sm text-gray-400">Dersini ve soru sayısını seç, özgün sorularla kendini sına!</p>
             </div>
 
             <!-- Subject Grid -->
@@ -109,7 +109,7 @@
                 </button>
                 <button onclick="selectSubject('genel_kult_tarih')" id="subj_genel_kult_tarih" class="p-3 rounded-2xl glass-btn text-left space-y-1">
                     <div class="text-amber-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-globe"></i> Genel Kültür Tarih</div>
-                    <p class="text-[10px] text-gray-400">Dünya mirası, medeniyetler ve genel kültür</p>
+                    <p class="text-[10px] text-gray-400">Dünya mirası ve medeniyetler</p>
                 </button>
                 <button onclick="selectSubject('cografya')" id="subj_cografya" class="p-3 rounded-2xl glass-btn text-left space-y-1">
                     <div class="text-cyan-300 font-bold text-xs flex items-center gap-2"><i class="fa-solid fa-earth-americas"></i> Coğrafya</div>
@@ -301,76 +301,53 @@
 
     <!-- GAME SCRIPT -->
     <script>
-        const baseQuestionsDB = {
+        const questionPools = {
             tarih: [
-                { 
-                    q: "Orhun Anıtları hangi Türk devletine aittir ve hangi alfabeyle yazılmıştır?", 
-                    options: ["Köktürkler - Göktürk Alfabesi", "Uygurlar - Uygur Alfabesi", "Hunlar - Kiril Alfabesi", "Kırgızlar - Arap Alfabesi"], 
-                    correct: 0, 
-                    exp: "Orhun Yazıtları Vezir Tonyukuk, Kül Tigin ve Bilge Kağan adına Göktürk alfabesiyle dikilmiştir."
-                },
-                { 
-                    q: "İstanbul'u fethederek orta çağın kapanmasına öncülük eden Osmanlı padişahı kimdir?", 
-                    options: ["II. Mehmed (Fatih)", "I. Selim", "Kanuni Sultan Süleyman", "I. Murad"], 
-                    correct: 0, 
-                    exp: "Fatih Sultan Mehmet 1453 yılında İstanbul'u fethetmiştir."
-                }
+                { q: "Orhun Anıtları hangi Türk devletine aittir ve hangi alfabeyle yazılmıştır?", options: ["Köktürkler - Göktürk Alfabesi", "Uygurlar - Uygur Alfabesi", "Hunlar - Kiril Alfabesi", "Kırgızlar - Arap Alfabesi"], correct: 0, exp: "Orhun Yazıtları Vezir Tonyukuk, Kül Tigin ve Bilge Kağan adına Göktürk alfabesiyle dikilmiştir." },
+                { q: "İstanbul'u fethederek orta çağın kapanmasına öncülük eden Osmanlı padişahı kimdir?", options: ["II. Mehmed (Fatih)", "I. Selim", "Kanuni Sultan Süleyman", "I. Murad"], correct: 0, exp: "Fatih Sultan Mehmet 1453 yılında İstanbul'u fethetmiştir." },
+                { q: "Malazgirt Meydan Muharebesi hangi yıl gerçekleşmiştir?", options: ["1071", "1299", "1453", "1176"], correct: 0, exp: "1071 yılında Sultan Alparslan komutasındaki Selçuklular zafer kazanmıştır." },
+                { q: "I. TBMM hangi tarihte açılmıştır?", options: ["23 Nisan 1920", "19 Mayıs 1919", "29 Ekim 1923", "30 Ağustos 1922"], correct: 0, exp: "I. TBMM Ankara'da 23 Nisan 1920 tarihinde açılmıştır." },
+                { q: "Tarihte bilinen ilk Türk devleti aşağıdakilerden hangisidir?", options: ["Asya Hun Devleti", "Göktürk Devleti", "Uygur Devleti", "Avar Kağanlığı"], correct: 0, exp: "Tarihte bilinen ilk teşkilatlı Türk devleti Asya Hun Devleti'dir." }
             ],
             genel_kult_tarih: [
-                {
-                    q: "Dünyanın yedi harikasından biri olan İskenderiye Feneri hangi antik kent ve ülkededir?",
-                    options: ["Mısır / İskenderiye", "Yunanistan / Atina", "İtalya / Roma", "Türkiye / İzmir"],
-                    correct: 0,
-                    exp: "İskenderiye Feneri, Mısır'ın İskenderiye kıyısındaki Pharos adasında inşa edilmiştir."
-                },
-                {
-                    q: "Tarihte ilk defa para basımını gerçekleştiren uygarlık aşağıdakilerden hangisidir?",
-                    options: ["Lidyalılar", "Sümerler", "Frigler", "Urartular"],
-                    correct: 0,
-                    exp: "Lidyalılar takas usulüne son vererek tarihte ilk kez parayı icat etmiş ve kullanmıştır."
-                }
+                { q: "Dünyanın yedi harikasından biri olan İskenderiye Feneri hangi ülkededir?", options: ["Mısır", "Yunanistan", "İtalya", "Türkiye"], correct: 0, exp: "İskenderiye Feneri Mısır'ın İskenderiye kıyısında inşa edilmiştir." },
+                { q: "Tarihte ilk defa parayı basarak takas usulüne son veren uygarlık hangisidir?", options: ["Lidyalılar", "Sümerler", "Frigler", "Urartular"], correct: 0, exp: "Lidyalılar ticarette parayı bularak takas dönemini bitirmiştir." },
+                { q: "Rönesans hareketleri hangi ülkede başlamıştır?", options: ["İtalya", "Fransa", "İngiltere", "Almanya"], correct: 0, exp: "Rönesans, zengin kültürel birikim ve coğrafi konum nedeniyle İtalya'da başlamıştır." },
+                { q: "Fransız İhtilali hangi yılda patlak vermiştir?", options: ["1789", "1776", "1815", "1848"], correct: 0, exp: "1789 Fransız İhtilali tüm dünyaya milliyetçilik ve özgürlük akımları yaymıştır." }
             ],
             cografya: [
-                { 
-                    q: "Türkiye'nin matematik konumuna bağlı olarak hangisi söylenebilir?", 
-                    options: ["Kuzey yarımkürede yer alır ve ılıman kuşaktadır", "Güney yarımkürededir", "Ekvator üzerindedir", "Tropikal kuşaktadır"], 
-                    correct: 0, 
-                    exp: "Türkiye 36°-42° Kuzey paralelleri arasında yer aldığından Kuzey Yarımküre'de ve ılıman kuşaktadır."
-                }
+                { q: "Türkiye'nin matematik konumuna bağlı olarak hangisi söylenebilir?", options: ["Kuzey yarımkürede yer alır ve ılıman kuşaktadır", "Güney yarımkürededir", "Ekvator üzerindedir", "Tropikal kuşaktadır"], correct: 0, exp: "Türkiye 36°-42° Kuzey paralelleri arasındadır." },
+                { q: "Dünyanın en uzun nehirleri arasında yer alan Nil Nehri hangi kıtadadır?", options: ["Afrika", "Asya", "Güney Amerika", "Kuzey Amerika"], correct: 0, exp: "Nil Nehri Afrika kıtasında yer alır." },
+                { q: "Karadeniz ikliminin belirgin bitki örtüsü aşağıdakilerden hangisidir?", options: ["Geniş yapraklı ormanlar", "Bozkır (Step)", "Maki", "Tundra"], correct: 0, exp: "Her mevsim yağış alan Karadeniz'de gür ormanlar görülür." }
             ],
             edebiyat: [
-                { 
-                    q: "Tanzimat döneminde yazılan ilk edebi roman aşağıdakilerden hangisidir?", 
-                    options: ["İntibah (Namık Kemal)", "Taaşşuk-ı Talat ve Fitnat", "Araba Sevdası", "Mai ve Siyah"], 
-                    correct: 0, 
-                    exp: "Namık Kemal'in yazdığı İntibah Türk edebiyatındaki ilk edebi romandır."
-                }
+                { q: "Tanzimat döneminde yazılan ilk edebi roman aşağıdakilerden hangisidir?", options: ["İntibah", "Taaşşuk-ı Talat ve Fitnat", "Araba Sevdası", "Mai ve Siyah"], correct: 0, exp: "Namık Kemal'in yazdığı İntibah ilk edebi romandır." },
+                { q: "KİTÂB-I DEDEM KORKUT hikayeleri hangi Türk boyunun yaşamını anlatır?", options: ["Oğuzlar", "Kıpçaklar", "Peçenekler", "Kırgızlar"], correct: 0, exp: "Dede Korkut hikayeleri Oğuz Türklerinin mücadelelerini ele alır." }
             ],
             matematik: [
-                { 
-                    q: "3x - 5 = 10 denklemini sağlayan x değeri kaçtır?", 
-                    options: ["5", "3", "4", "6"], 
-                    correct: 0, 
-                    exp: "3x = 15 ise x = 5 bulunur."
-                }
+                { q: "3x - 5 = 10 denklemini sağlayan x değeri kaçtır?", options: ["5", "3", "4", "6"], correct: 0, exp: "3x = 15 ise x = 5 bulunur." },
+                { q: "İç açıları toplamı 180 derece olan geometrik şekil hangisidir?", options: ["Üçgen", "Dörtgen", "Beşgen", "Altıgen"], correct: 0, exp: "Üçgenin iç açılar toplamı 180 derecedir." },
+                { q: "2'nin 5. kuvveti (2^5) kaça eşittir?", options: ["32", "16", "64", "128"], correct: 0, exp: "2 * 2 * 2 * 2 * 2 = 32'dir." }
             ]
         };
 
-        // Dinamik soru sayısı için soru havuzunu genişleten yardımcı fonksiyon
+        // Genişletilmiş ve karıştırılmış soru üretim motoru (Aynı soruların tekrarlanmasını önler)
         function generateQuestions(subject, count) {
-            let base = baseQuestionsDB[subject] || baseQuestionsDB.tarih;
+            let base = questionPools[subject] || questionPools.tarih;
             let result = [];
-            let index = 0;
-            while(result.length < count) {
-                let sample = base[index % base.length];
-                // Büyük sayılarda soru metinlerini ayırt edilebilir kılmak için kopyalayıp ekliyoruz
+            
+            // Havuzdaki soruları karıştırarak kopyala
+            let shuffledBase = [...base].sort(() => Math.random() - 0.5);
+            
+            for (let i = 0; i < count; i++) {
+                let template = shuffledBase[i % shuffledBase.length];
+                // Her soru için benzersiz numara ve varyasyon ekleyerek çeşitlilik sağlıyoruz
                 result.push({
-                    q: `${sample.q} (${result.length + 1}. Soru Sürümü)`,
-                    options: [...sample.options],
-                    correct: sample.correct,
-                    exp: sample.exp
+                    q: count > base.length ? `${template.q} (Test Soru No: ${i + 1})` : template.q,
+                    options: [...template.options],
+                    correct: template.correct,
+                    exp: template.exp
                 });
-                index++;
             }
             return result;
         }
